@@ -18,11 +18,9 @@ const UserList =() =>{
    }, [])
 
    async function getCatalog1DataList(){
-      console.log("getCatalog1DataList called :"+JSON.stringify(auth))
       const {data:company} =await catalog1DataFetch(auth.companyId);
       setCatalog1List(company)
-      console.log("company :")
-      console.log(company)
+
    }
 
    //handle delete
@@ -40,7 +38,6 @@ const UserList =() =>{
 
    //delete record
    const  deleteRecord= async () =>{
-      console.log("delete called :"+selectRow.id)
       try{
          const response =await selectedCatalog1Delete(selectRow.id)
          if(response){
@@ -58,14 +55,13 @@ const UserList =() =>{
 
    //handle toggle
    const  handleToggle=async (item,idx)=>{
-      console.log("handleToggle called")
       //update db api
       try{
          const response = await selectedCatalog1StatusUpdate(item.id)
          if(response){
             let newArr = [...catalog1List];
             newArr[idx]['status']= newArr[idx]['status']?0:1
-            console.log("newGender : "+newArr)
+
             setCatalog1List(newArr)
          }
       }catch (err) {

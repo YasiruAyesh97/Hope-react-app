@@ -9,6 +9,7 @@ import {
    selectedRegularUserDelete,
    selectedRegularUserStatusUpdate
 } from "../../../service/web/userService";
+import useAuth from "../../../hooks/useAuth";
 
 const schema = yup.object().shape({
 
@@ -23,7 +24,7 @@ const schema = yup.object().shape({
 
 
 const UserList =() =>{
-
+   const { auth } = useAuth();
    //initial record
    const [regularUserList,setRegularUserList]=useState([])
    //initial data load
@@ -32,7 +33,7 @@ const UserList =() =>{
    }, [])
 
    async function getRegularUserDataList(){
-      const {data:user} =await RegularUserDataFetch();
+      const {data:user} =await RegularUserDataFetch(auth.companyId);
       setRegularUserList(user)
 
    }
@@ -56,7 +57,7 @@ const UserList =() =>{
    const handleCloseEdit = () => setShow(false);
 
    const handleShowEdit = (item) =>{
-      console.log(item)
+
       setSelectRow(item)
       setInitialValues({
          username:item.username,
@@ -92,7 +93,7 @@ const UserList =() =>{
 
 //delete record
    const  deleteRecord= async () =>{
-      console.log("delete called :"+selectRow.id)
+
       try{
          const response =await selectedRegularUserDelete(selectRow.id)
          if(response){
@@ -110,14 +111,13 @@ const UserList =() =>{
 
    //handle toggle
    const  handleToggle=async (item,idx)=>{
-      console.log("handleToggle called")
-      //update db api
+
       try{
          const response = await selectedRegularUserStatusUpdate(item.id)
          if(response){
             let newArr = [...regularUserList];
             newArr[idx]['status']= newArr[idx]['status']?0:1
-            console.log("newGender : "+newArr)
+
             setRegularUserList(newArr)
          }
       }catch (err) {

@@ -37,6 +37,7 @@ db.company = require("../models/company.js")(sequelize, Sequelize);
 db.catalog_1 = require("../models/catalog_1")(sequelize, Sequelize);
 db.catalog_2 = require("../models/catalog_2")(sequelize, Sequelize);
 db.catalog_3 = require("../models/catalog_3")(sequelize, Sequelize);
+db.document = require("../models/document")(sequelize, Sequelize);
 
 db.users_roles = require("../models/users_roles.js")(sequelize, Sequelize);
 db.role.belongsToMany(db.user, {
@@ -62,6 +63,21 @@ db.catalog_2.belongsTo(db.company,{foreignKey: 'companyId', targetKey: 'id'});
 
 db.company.hasMany(db.catalog_3,{foreignKey: 'companyId', sourceKey: 'id'});
 db.catalog_3.belongsTo(db.company,{foreignKey: 'companyId', targetKey: 'id'});
+
+db.company.hasMany(db.document,{foreignKey: 'companyId', sourceKey: 'id'});
+db.document.belongsTo(db.company,{foreignKey: 'companyId', targetKey: 'id'});
+
+db.user.hasMany(db.document,{foreignKey: 'userId', sourceKey: 'id'});
+db.document.belongsTo(db.user,{foreignKey: 'userId', targetKey: 'id'});
+
+db.catalog_1.hasMany(db.document,{foreignKey: 'catalog1Id', sourceKey: 'id'});
+db.document.belongsTo(db.catalog_1,{foreignKey: 'catalog1Id', targetKey: 'id'});
+
+db.catalog_2.hasMany(db.document,{foreignKey: 'catalog2Id', sourceKey: 'id'});
+db.document.belongsTo(db.catalog_2,{foreignKey: 'catalog2Id', targetKey: 'id'});
+
+db.catalog_3.hasMany(db.document,{foreignKey: 'catalog3Id', sourceKey: 'id'});
+db.document.belongsTo(db.catalog_3,{foreignKey: 'catalog3Id', targetKey: 'id'});
 
 db.ROLES = ["admin", "usuario"];
 

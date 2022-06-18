@@ -11,7 +11,7 @@ module.exports = function(app) {
   });
 
 
-  app.get("/api/admin/user-list", controller.regularUsersList);
+  app.get("/api/admin/user-list/:id", controller.regularUsersList);
   app.post("/api/admin/add", controller.regularUserRegister);
   app.put( "/api/admin/status/:id",controller.selectedRegularUserStatusChange);
   app.delete("/api/admin/delete-user/:id", controller.deleteSelectedRegularUser);

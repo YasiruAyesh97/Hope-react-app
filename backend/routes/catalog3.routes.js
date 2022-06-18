@@ -10,9 +10,9 @@ module.exports = function(app) {
     next();
   });
 
-  app.post( "/api/catalog3/insert",controller.insertCatalog3);
-  app.get( "/api/catalog3/all/:companyId",controller.Catalog3List);
-  app.put( "/api/catalog3/status/:id",controller.selectedCatalog3StatusChange);
+  app.post( "/api/catalog3/insert",controller.insertCatalog1);
+  app.get( "/api/catalog3/all/:companyId",controller.Catalog1List);
+  app.put( "/api/catalog3/status/:id",controller.selectedCatalog1StatusChange);
   app.delete( "/api/catalog3/delete/:id",controller.deleteSelectedCatalog);
 
 };

@@ -39,7 +39,7 @@ const AdminAdd =() =>{
             const response = await registerAdminOrUser(values.email,values.username,values.password,auth.companyId);
 
             if(response){
-                console.log(response)
+
                 setErrCode(200);
                 setErrMsg('Registration successful');
                 resetForm({})

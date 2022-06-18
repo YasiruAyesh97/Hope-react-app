@@ -11,12 +11,13 @@ export async function login(email,password){
     //
     if(jwt){
         // console.log("TOKEN2 :"+TOKEN)
+        const id = jwtDecode(jwt).id;
         const username = jwtDecode(jwt).username;
         const email = jwtDecode(jwt).email;
         const roles = jwtDecode(jwt).roles;
         const companyId = jwtDecode(jwt).companyId;
         const  accessToken = jwt;
-        return { username, email, roles, accessToken,companyId };
+        return { id,username, email, roles, accessToken,companyId };
 
     }
     return null;
@@ -53,8 +54,8 @@ export function selectedCompanyDelete(id){
 }
 
 //admin
-export function RegularUserDataFetch(){
-    return  http.get(`${BASEURL}`+'/'+'api/admin/user-list');
+export function RegularUserDataFetch(companyId){
+    return  http.get(`${BASEURL}`+'/'+'api/admin/user-list'+'/'+companyId);
 }
 
 export function selectedRegularUserDelete(id){
@@ -65,13 +66,16 @@ export function selectedRegularUserStatusUpdate(id){
     return  http.put(`${BASEURL}`+'/'+'api/admin/status'+'/'+id);
 }
 
+
+export function catalogRecordRegister(type,name,companyId){
+    return  http.post(`${BASEURL}`+'/'+'api/catalog'+`${type}`+'/insert',{name,companyId});
+}
+
 //catalog 1
 export function catalog1DataFetch(companyId){
     return  http.get(`${BASEURL}`+'/'+'api/catalog1/all'+'/'+companyId);
 }
-export function catalog3DataFetch(companyId){
-    return  http.get(`${BASEURL}`+'/'+'api/catalog3/all'+'/'+companyId);
-}
+
 export function selectedCatalog1StatusUpdate(id){
     return  http.put(`${BASEURL}`+'/'+'api/catalog1/status'+'/'+id);
 }
@@ -89,15 +93,37 @@ export function selectedCatalog2StatusUpdate(id){
 export function selectedCatalog2Delete(id){
     return  http.delete(`${BASEURL}`+'/'+'api/catalog2/delete'+'/'+id);
 }
-
-
-
+//catalog 3
+export function catalog3DataFetch(companyId){
+    return  http.get(`${BASEURL}`+'/'+'api/catalog3/all'+'/'+companyId);
+}
 
 export function selectedCatalog3StatusUpdate(id){
     return  http.put(`${BASEURL}`+'/'+'api/catalog3/status'+'/'+id);
 }
 export function selectedCatalog3Delete(id){
     return  http.delete(`${BASEURL}`+'/'+'api/catalog3/delete'+'/'+id);
+}
+
+//document
+export function documentListDataFetch(companyId){
+    return  http.get(`${BASEURL}`+'/'+'api/document/all'+'/'+companyId);
+}
+
+export function selectedDocumentDelete(id){
+    return  http.delete(`${BASEURL}`+'/'+'api/document/delete'+'/'+id);
+}
+export function selectedDocumentStatusUpdate(id){
+    return  http.put(`${BASEURL}`+'/'+'api/document/status'+'/'+id);
+}
+
+
+export function documentRecordInsert(name,dueDate,agentName,catalog1Id,catalog2Id,catalog3Id,companyId,userId){
+    return  http.post(`${BASEURL}`+'/'+'api/document/insert',{name,dueDate,agentName,catalog1Id,catalog2Id,catalog3Id,companyId,userId});
+}
+
+export function expiresSoonDocumentListDataFetch(companyId){
+    return  http.get(`${BASEURL}`+'/'+'api/document/expiresoon'+'/'+companyId);
 }
 
 

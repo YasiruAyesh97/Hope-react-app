@@ -99,6 +99,7 @@ exports.regularUsersList = async (req, res) => {
                 id: {
                     [Op.in]: user_arr
                 },
+                companyId:req.params.id
 
             },
         })

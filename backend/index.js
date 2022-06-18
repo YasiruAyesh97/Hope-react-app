@@ -37,6 +37,7 @@ require('./routes/admin.routes')(app);
 require('./routes/catalog1.routes')(app);
 require('./routes/catalog2.routes')(app);
 require('./routes/catalog3.routes')(app);
+require('./routes/document.routes')(app);
 
 db.sequelize.sync({alter:true}).then(() => {
 
