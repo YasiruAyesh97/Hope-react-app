@@ -6,7 +6,7 @@ const Company = db.company;
 const Users_Roles = db.users_roles;
 const Role = db.role;
 const Op = db.Sequelize.Op;
-
+let bcrypt = require("bcryptjs");
 
 exports.usersList = async (req, res) => {
     // Save User to Database
@@ -148,10 +148,98 @@ exports.deleteSelectedUser = async (req, res) => {
         }
 
 
+    }catch(err) {
+        return res.status(500).send({ message: "Something wrrong" });
+    }
+
+};
+
+
+exports.selectedUserEdit = async (req, res) => {
+
+
+    // Save User to Database
+    //   return res.status(200).send(req.body.email);
+    try{
+        let isAdmin = req.body.isAdmin;
+        let isRUser = req.body.isRUser;
+
+        let adminrole =await Role.findOne({
+            where: {
+                name:"admin"
+            }
+        })
+        let regularuserrole =await Role.findOne({
+            where: {
+                name:"user"
+            }
+        })
+
+        let user =await User.findOne({
+
+            where: { id: req.params.id }
+        });
+
+        if(!user){
+            res.status(401).send({ message:'no user found' });
+        }
+
+        User.update(
+            {
+                username: req.body.username,
+                email: req.body.email,
+                active: req.body.status,
+                password:  bcrypt.hashSync(req.body.password, 8),
+
+            },
+            { where: { id: req.params.id } }
+        ).then(user => {
+            if(user){
+                Users_Roles.destroy({
+                    where: {
+                        userId :req.params.id
+                    }
+
+                }).then(deletedRecord=>{
+                    if(deletedRecord>=1){
+                        if(isAdmin ||isAdmin=='true'){
+                            Users_Roles.create({
+                                roleId: adminrole.id,
+                                userId: req.params.id,
+
+                            }).then(data=>{ console.log('Admin distroyee')})
+                               .catch(err => {
+                                    console.log("Users_Roles admin error")
+                                    return res.status(500).send({ message: err.message });
+                                });
+                        }
+                        if(isRUser||isRUser=='true'){
+                            Users_Roles.create({
+                                roleId: regularuserrole.id,
+                                userId: req.params.id,
+
+                            }).then(data=>{ console.log('')})
+                              .catch(err => {
+
+                                    return res.status(500).send({ message: err.message });
+                                });
+                        }
+                        return res.status(200).send({ message: "successfully updated" });
+                    }
+                }).catch(err => {
+                    return res.status(500).send({message: err.message });
+                })
+            }
+
+        }).catch(err => {
+            res.status(401).send({ message: err.message });
+        });
+
+
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({message: err.message });
     }
 
 };

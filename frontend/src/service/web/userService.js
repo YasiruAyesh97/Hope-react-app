@@ -10,6 +10,7 @@ export async function login(email,password){
 
     //
     if(jwt){
+
         // console.log("TOKEN2 :"+TOKEN)
         const id = jwtDecode(jwt).id;
         const username = jwtDecode(jwt).username;
@@ -17,6 +18,7 @@ export async function login(email,password){
         const roles = jwtDecode(jwt).roles;
         const companyId = jwtDecode(jwt).companyId;
         const  accessToken = jwt;
+        localStorage.setItem('token',accessToken);
         return { id,username, email, roles, accessToken,companyId };
 
     }
@@ -42,6 +44,11 @@ export function adminRegularUserData(){
 export function selectedUserDataFetch(id){
     return  http.post(`${BASEURL}`+'/'+'api/super-admin/selected-user',{id});
 }
+export function selectedRegularUserOrAdminUpdate(id,username,email,password,status,isAdmin,isRUser){
+    console.log(id,username,email,status,password,isAdmin,isRUser)
+    return  http.put(`${BASEURL}`+'/'+'api/super-admin/edit-user'+'/'+id,{username, email, password,status, isAdmin, isRUser});
+}
+
 export function selectedUserDataDelete(id){
     return  http.delete(`${BASEURL}`+'/'+'api/super-admin/delete-user'+'/'+id);
 }
@@ -126,37 +133,22 @@ export function expiresSoonDocumentListDataFetch(companyId){
     return  http.get(`${BASEURL}`+'/'+'api/document/expiresoon'+'/'+companyId);
 }
 
+export function logout(){
+    localStorage.removeItem('token');
+}
+export function getJwt(){
+    return localStorage.getItem('token');
+}
 
 
-// export async function getAllUsers() {
-//   return await http.post(`${config["BASEURL"]}`+'/'+'web/user/view');
-// }
-// export function getUser(id){
-//   return  http.get(`${config["BASEURL"]}`+'/'+'web/user/select'+'/'+id);
-// }
-//
-// export function updateUser(user,selectedUser){
-//
-//   return  http.put(`${config["BASEURL"]}`+'/'+'web/user/update'+'/'+selectedUser,user);
-// }
-//
-// export function viewUser(id){
-//
-//   return  http.get(`${config["BASEURL"]}`+'/'+'web/user/profile'+'/'+id);
-// }
-//
-// export function getCurrentUser(){
-//
-//   const jwt = localStorage.getItem('token');
-//   if(jwt) return jwtDecode(jwt);
-//   return false;
-// }
-// export function logout(){
-//   localStorage.removeItem('token');
-// }
-// export function getJwt(){
-//   return localStorage.getItem('token');
-// }
-// export async function getPoliceDivision() {
-//   return await http.get(`${config["BASEURL"]}`+'/'+'web/user/division');
-// }
+export function getDecodeJwt(){
+
+    const jwt =localStorage.getItem('token')
+    const id = jwtDecode(jwt).id;
+    const username = jwtDecode(jwt).username;
+    const email = jwtDecode(jwt).email;
+    const roles = jwtDecode(jwt).roles;
+    const companyId = jwtDecode(jwt).companyId;
+    const  accessToken = jwt;
+    return { id,username, email, roles, accessToken,companyId };;
+}

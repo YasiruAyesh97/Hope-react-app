@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { Formik } from "formik";
 
 import {registerCompany} from "../../../service/web/userService";
+import {useNavigate} from "react-router-dom";
 
 
 const schema = yup.object().shape({
@@ -14,6 +15,7 @@ const schema = yup.object().shape({
 
 });
 const AdminAdd =() =>{
+    const navigate = useNavigate();
     const [companyList,setCompanyList]=useState([])
 
     useEffect(() => {
@@ -34,7 +36,7 @@ const AdminAdd =() =>{
             if(response){
                 console.log(response)
                 setErrCode(200);
-                setErrMsg('Registration successful');
+                setErrMsg('Add new record successful');
                 resetForm({})
             }
 
@@ -49,7 +51,10 @@ const AdminAdd =() =>{
             } else if (err.response?.status === 401) {
                 setErrMsg('Registration Failed');
                 setErrCode(401);
-            } else {
+            }else if (err.response?.status === 403) {
+                navigate("/auth")
+                setErrCode(403);
+            }  else {
                 setErrMsg('Registration Failed');
             }
             // errRef.current.focus();

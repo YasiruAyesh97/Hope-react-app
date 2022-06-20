@@ -1,11 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import {Row, Col, Image, Button, Modal, Form, FormCheck} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import Card from '../../../components/Card'
 
 import {Formik} from "formik";
 import * as yup from "yup";
-import {adminRegularUserData, companyListData,selectedUserDataFetch,selectedUserDataDelete} from "../../../service/web/userService";
+import {
+   adminRegularUserData,
+   companyListData,
+   selectedUserDataFetch,
+   selectedUserDataDelete,
+   selectedRegularUserOrAdminUpdate
+} from "../../../service/web/userService";
 
 const schema = yup.object().shape({
 
@@ -15,8 +21,8 @@ const schema = yup.object().shape({
 
 
 });
-const UserList =() =>{
-
+const UserList = ({id, username, email, active, password, isAdmin, isRUser}) =>{
+   const navigate = useNavigate();
    //edit model
    const [show, setShow] = useState(false);
    const [initialValues,setInitialValues]=useState({
@@ -39,20 +45,19 @@ const UserList =() =>{
   //initial data load
    useEffect(() => {
       getUserDataList();
-   }, [])
+   }, [show])
 
    async function getUserDataList(){
       const {data:users} =await adminRegularUserData();
       setUsersList(users)
-      console.log("users :")
-      console.log(users)
+
    }
 
    //edit model
    const handleCloseEdit = () => setShow(false);
 
    const handleShowEdit =async (item) =>{
-      console.log(item)
+
       setSelectRow(item)
       const {data:user} =await selectedUserDataFetch(item.id);
       setInitialValues(user)
@@ -64,12 +69,37 @@ const UserList =() =>{
 
 
    //edit form
-   const handleSubmit=values=>{
-      // console.log(values)
-      // let newArr = [...catalogList];
-      // const result = newArr.filter(item => item.id != selectRow.id);
-      // setCatalogList(result)
-      handleCloseEdit()
+   const handleSubmit= async (values)=>{
+      try {
+         console.log('selected item : '+JSON.stringify(selectRow));
+         const response = await selectedRegularUserOrAdminUpdate(selectRow.id,values.username, values.email, values.password, values.status, values.isAdmin, values.isRUser);
+
+         if(response){
+            console.log(response)
+            setErrCode(200);
+            setErrMsg('Add new record successful');
+         }
+         handleCloseEdit()
+         // navigate(from, { replace: true });
+      } catch (err) {
+         if (!err?.response) {
+            setErrMsg('No Server Response');
+            setErrCode(500);
+         } else if (err.response?.status === 400) {
+            setErrMsg('User already updated');
+            setErrCode(400);
+         } else if (err.response?.status === 401) {
+            setErrMsg('Update Failed');
+            setErrCode(401);
+         }  else if (err.response?.status === 403) {
+            navigate("/auth")
+            setErrCode(403);
+         } else {
+            setErrMsg('Update Failed');
+         }
+         // errRef.current.focus();
+      }
+
    }
 
    //delete model
@@ -207,7 +237,7 @@ const UserList =() =>{
                                                value={values.email}
                                                onChange={handleChange("email")}
                                                isValid={touched.email && !errors.email}
-                                               isInvalid={!!errors.email}
+                                               isInvalid={errors.email}
                                            />
                                            <Form.Control.Feedback type="invalid">
                                               {errors.email}
@@ -225,7 +255,7 @@ const UserList =() =>{
                                                value={values.password}
                                                onChange={handleChange("password")}
                                                isValid={touched.password && !errors.password}
-                                               isInvalid={!!errors.password}
+                                               isInvalid={errors.password}
                                            />
                                            <Form.Control.Feedback type="invalid">
                                               {errors.password}
@@ -237,7 +267,7 @@ const UserList =() =>{
 
 
                                         <Form.Group className="form-group">
-                                           <Form.Label htmlFor="password">User Role:</Form.Label>
+                                           <Form.Label htmlFor="isAdmin">User Role:</Form.Label>
                                            <br/>
                                            <Form.Check className=" form-check-inline">
 
@@ -250,16 +280,15 @@ const UserList =() =>{
                                                   checked={values.isAdmin}
                                                   onChange={() => {
                                                      const previous =values.isAdmin
-                                                     console.log("before admin value change  :"+previous)
+
                                                      setFieldValue("isAdmin", !previous)
 
-                                                     console.log("admin value change  :"+!previous)
                                                      if(!previous || values.isRUser){
                                                         setFieldValue("roles", true)
-                                                        console.log("if roles updated  :"+values.roles)
+
                                                      }else{
                                                         setFieldValue("roles", false)
-                                                        console.log("else roles updated  :"+values.roles)
+
                                                      }
 
 
@@ -267,7 +296,7 @@ const UserList =() =>{
 
 
                                                   isValid={touched.isAdmin && !errors.roles}
-                                                  isInvalid={!!errors.roles}
+                                                  isInvalid={errors.roles}
 
 
                                               />
@@ -285,20 +314,18 @@ const UserList =() =>{
                                                   onChange={() => {
 
                                                      const previous =values.isRUser
-                                                     console.log("before admin value change  :"+previous)
+
                                                      setFieldValue("isRUser", !previous)
 
-                                                     console.log("admin value change  :"+!previous)
                                                      if(!previous || values.isAdmin){
                                                         setFieldValue("roles", true)
-                                                        console.log("if roles updated  :"+values.roles)
                                                      }else{
                                                         setFieldValue("roles", false)
-                                                        console.log("else roles updated  :"+values.roles)
+
                                                      }
                                                   }}
                                                   isValid={touched.isRUser && !errors.roles}
-                                                  isInvalid={!!errors.roles}
+                                                  isInvalid={errors.roles}
                                               />
                                               <Form.Control.Feedback type="invalid" style={{marginRight: '2em',marginLeft: '-1.5em'}}>
                                                  {errors.roles}
@@ -315,20 +342,14 @@ const UserList =() =>{
                                                   className="form-check-input"
                                                   type="checkbox"
                                                   id="rowcheck{item.id}"
-                                                  // defaultChecked
+                                                  name="status"
                                                   checked={values.status}
                                                   onChange={() => setFieldValue("status", !values.status)}
-                                                  // onChange={()=>handleToggle(item.id)}
-                                                  // onChange={event => {
-                                                  //    event.preventDefault();
-                                                  //    handleToggle(event)
-                                                  // }}
-                                                  // onChange={(event ) => }
                                               />
                                               {/*<FormCheck.Label className="form-check-label" htmlFor="flexSwitchCheckChecked">Checked switch checkbox input</FormCheck.Label>*/}
                                            </Form.Check>
                                            <Form.Control.Feedback type="invalid">
-                                              {errors.password}
+                                              {errors.status}
                                            </Form.Control.Feedback>
 
                                         </Form.Group>

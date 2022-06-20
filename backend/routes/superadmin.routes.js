@@ -1,4 +1,4 @@
-const { verifySignUp } = require("../middleware");
+const { authJwt } = require("../middleware");
 const controller = require("../controllers/superadmin.controller");
 
 module.exports = function(app) {
@@ -19,7 +19,8 @@ module.exports = function(app) {
   //   controller.signup
   // );
   //
-  app.get("/api/super-admin/user-list", controller.usersList);
+  app.get("/api/super-admin/user-list",controller.usersList);
   app.post("/api/super-admin/selected-user", controller.selectedUser);
+  app.put("/api/super-admin/edit-user/:id", controller.selectedUserEdit);
   app.delete("/api/super-admin/delete-user/:id", controller.deleteSelectedUser);
 };

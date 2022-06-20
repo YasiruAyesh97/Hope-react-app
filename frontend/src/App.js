@@ -37,8 +37,7 @@ import "./assets/scss/custom.scss"
 import "./assets/scss/customizer.scss"
 
 import RequireAuth from "./components/RequireAuth";
-// import CatalogDataAdd from "./views/admin/catalog/catalog-data-add";
-// import DocumentList from "./views/admin/document/document-list";
+
 
 
 const ROLES = {

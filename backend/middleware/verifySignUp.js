@@ -11,7 +11,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   }).then(user => {
     if (user) {
       res.status(400).send({
-        message: "Error! El correo ya se encuentra registrado"
+        message: "user already registered"
       });
       return;
     }
@@ -30,7 +30,7 @@ checkRolesExisted = (req, res, next) => {
       console.log("role find")
       if (!role) {
         res.status(400).send({
-          message: "Error! El correo ya se encuentra registrado"
+          message: "Error! No role find"
         });
         return;
       }

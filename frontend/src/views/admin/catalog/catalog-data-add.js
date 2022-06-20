@@ -39,7 +39,7 @@ const AdminAdd =() =>{
 
          if(response){
             setErrCode(200);
-            setErrMsg('Registration successful');
+            setErrMsg('Add new record successful');
             resetForm({})
          }
 

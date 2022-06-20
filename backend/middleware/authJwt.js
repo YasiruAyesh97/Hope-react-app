@@ -4,28 +4,35 @@ const db = require("../models");
 const User = db.user;
 
 verifyToken = (req, res, next) => {
+  console.log("***** verifyToken ******")
   let token = req.headers["x-access-token"];
   if (!token) {
     return res.status(403).send({
-      message: "No se proporcionó un token"
+      message: "No token found"
     });
   }
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      return res.status(401).send({
-        message: "Sin autorización"
+      return res.status(403).send({
+        message: "Invalid token"
       });
     }
-    req.userId = decoded.id;
+    let dateNow = new Date();
+    if(decoded.exp < Math.round(dateNow.getTime()/1000)){
+      return res.status(403).send({
+        message: "Expire token"
+      });
+    }
+    // console.log("***** expire time ******",decoded.exp,Math.round(dateNow.getTime()/1000),decoded.exp < Math.round(dateNow.getTime()/1000))
     next();
   });
 };
 
-isAdmin = (req, res, next) => {
+isSuperAdmin = (req, res, next) => {
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admin") {
+        if (roles[i].name === "superadmin") {
           console.log("admin comes")
           next();
           return;
@@ -39,11 +46,11 @@ isAdmin = (req, res, next) => {
   });
 };
 
-isModerator = (req, res, next) => {
+isAdmin = (req, res, next) => {
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "moderator") {
+        if (roles[i].name === "admin") {
           next();
           return;
         }
@@ -55,11 +62,11 @@ isModerator = (req, res, next) => {
   });
 };
 
-isModeratorOrAdmin = (req, res, next) => {
+isUser = (req, res, next) => {
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "moderator") {
+        if (roles[i].name === "user") {
           next();
           return;
         }
@@ -77,9 +84,10 @@ isModeratorOrAdmin = (req, res, next) => {
 
 const authJwt = {
   verifyToken: verifyToken,
+  isSuperAdmin: isSuperAdmin,
   isAdmin: isAdmin,
-  isModerator: isModerator,
-  isModeratorOrAdmin: isModeratorOrAdmin
+  isUser: isUser,
+
 };
 
 module.exports = authJwt;

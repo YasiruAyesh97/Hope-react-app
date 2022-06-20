@@ -1,6 +1,7 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-
+import axios from "axios";
+import {getJwt} from "../service/web/userService";
 
 const RequireAuth = ({ allowedRoles }) => {
     const { auth } = useAuth();
@@ -10,8 +11,8 @@ const RequireAuth = ({ allowedRoles }) => {
         auth?.roles?.find(role => allowedRoles?.includes(role))
             ? <Outlet />
             : auth?.user
-            ? <Navigate to="/unauthorized" state={{ from: location }} replace />
-            : <Navigate to="/auth" state={{ from: location }} replace />
+                ? <Navigate to="/unauthorized" state={{ from: location }} replace />
+                : <Navigate to="/auth" state={{ from: location }} replace />
     );
 }
 

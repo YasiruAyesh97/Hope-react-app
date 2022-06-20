@@ -29,7 +29,7 @@ import Logo from '../../components/logo'
 import {NavbarstyleAction, getDirMode, SchemeDirAction,  getNavbarStyleMode, getSidebarActiveMode, SidebarActiveStyleAction, getDarkMode, ModeAction,  SidebarColorAction, getSidebarColorMode, getSidebarTypeMode} from '../../../../store/setting/setting'
 import {connect} from "react-redux"
 import useAuth from "../../../../hooks/useAuth";
-import {expiresSoonDocumentListDataFetch} from "../../../../service/web/userService";
+import {expiresSoonDocumentListDataFetch, login, logout} from "../../../../service/web/userService";
 
 const mapStateToProps = (state) => {
     return {
@@ -68,9 +68,13 @@ const Header = (props) => {
          }
          else{
              props.NavbarstyleAction(navbarstyleMode1);
-             getExipreSoonDocuments()
+
          }
   })
+    useEffect(() => {
+        getExipreSoonDocuments()
+    },[])
+
     const minisidebar =() =>{
         document.getElementsByTagName('ASIDE')[0].classList.toggle('sidebar-mini')
     }
@@ -169,7 +173,10 @@ const Header = (props) => {
                                     </div>
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu  className="dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <Dropdown.Item onClick={()=>setAuth({})}>Logout</Dropdown.Item>
+                                    <Dropdown.Item onClick={()=>{
+                                        setAuth({});
+                                        logout()
+                                    }}>Logout</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </Nav>
