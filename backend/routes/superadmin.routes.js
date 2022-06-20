@@ -19,8 +19,8 @@ module.exports = function(app) {
   //   controller.signup
   // );
   //
-  app.get("/api/super-admin/user-list",controller.usersList);
-  app.post("/api/super-admin/selected-user", controller.selectedUser);
-  app.put("/api/super-admin/edit-user/:id", controller.selectedUserEdit);
-  app.delete("/api/super-admin/delete-user/:id", controller.deleteSelectedUser);
+  app.get("/api/super-admin/user-list",[authJwt.verifyToken,authJwt.isSuperAdmin],controller.usersList);
+  app.post("/api/super-admin/selected-user",[authJwt.verifyToken,authJwt.isSuperAdmin], controller.selectedUser);
+  app.put("/api/super-admin/edit-user/:id",[authJwt.verifyToken,authJwt.isSuperAdmin], controller.selectedUserEdit);
+  app.delete("/api/super-admin/delete-user/:id",[authJwt.verifyToken,authJwt.isSuperAdmin], controller.deleteSelectedUser);
 };

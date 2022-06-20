@@ -1,4 +1,4 @@
-// const { verifySignUp } = require("../middleware");
+const { authJwt } = require("../middleware");
 const controller = require("../controllers/document.controller");
 
 module.exports = function(app) {
@@ -10,10 +10,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post( "/api/document/insert",controller.insertDocument);
-  app.get( "/api/document/all/:companyId",controller.DocumentList);
-  app.get( "/api/document/expiresoon/:companyId",controller.ExpireSoonDocumentList);
-  app.put( "/api/document/status/:id",controller.selectedDocumentStatusChange);
-  app.delete( "/api/document/delete/:id",controller.deleteSelectedDocument);
+  app.post( "/api/document/insert",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.insertDocument);
+  app.get( "/api/document/all/:companyId",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.DocumentList);
+  app.get( "/api/document/expiresoon/:companyId",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.ExpireSoonDocumentList);
+  app.put( "/api/document/status/:id",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.selectedDocumentStatusChange);
+  app.delete( "/api/document/delete/:id",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.deleteSelectedDocument);
 
 };

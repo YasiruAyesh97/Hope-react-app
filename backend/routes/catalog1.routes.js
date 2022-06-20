@@ -1,4 +1,4 @@
-// const { verifySignUp } = require("../middleware");
+const { verifySignUp ,authJwt} = require("../middleware");
 const controller = require("../controllers/catalog1.controller");
 
 module.exports = function(app) {
@@ -10,9 +10,9 @@ module.exports = function(app) {
     next();
   });
 
-  app.post( "/api/catalog1/insert",controller.insertCatalog1);
-  app.get( "/api/catalog1/all/:companyId",controller.Catalog1List);
-  app.put( "/api/catalog1/status/:id",controller.selectedCatalog1StatusChange);
-  app.delete( "/api/catalog1/delete/:id",controller.deleteSelectedCatalog);
+  app.post( "/api/catalog1/insert",[authJwt.verifyToken,authJwt.isAdmin],controller.insertCatalog1);
+  app.get( "/api/catalog1/all/:companyId",[authJwt.verifyToken,authJwt.isAdmin],controller.Catalog1List);
+  app.put( "/api/catalog1/status/:id",[authJwt.verifyToken,authJwt.isAdmin],controller.selectedCatalog1StatusChange);
+  app.delete( "/api/catalog1/delete/:id",[authJwt.verifyToken,authJwt.isAdmin],controller.deleteSelectedCatalog);
 
 };

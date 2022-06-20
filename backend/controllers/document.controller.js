@@ -59,6 +59,8 @@ exports.DocumentList = async (req, res) => {
                 'id',
                 'name',
                 'dueDate',
+                [fn('DATE', col('dueDate')), 'dueDate'],
+                // [db.Sequelize.literal('SUBSTRING(dueDate, 0, 10) '),'dueDate'],
                 'agentName',
                 [db.Sequelize.literal('catalog_1.name'), 'catalog1name'],
                 [db.Sequelize.literal('catalog_2.name'), 'catalog2name'],

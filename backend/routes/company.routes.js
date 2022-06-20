@@ -1,4 +1,4 @@
-// const { verifySignUp } = require("../middleware");
+const { authJwt } = require("../middleware");
 const controller = require("../controllers/company.controller");
 
 module.exports = function(app) {
@@ -10,9 +10,9 @@ module.exports = function(app) {
     next();
   });
 
-  app.post( "/api/company/register",controller.registerCompany);
-  app.get( "/api/company/all",controller.companyList);
-  app.put( "/api/company/status/:id",controller.selectedCompanyStatusChange);
-  app.delete( "/api/company/delete/:id",controller.deleteSelectedCompany);
+  app.post( "/api/company/register",[authJwt.verifyToken,authJwt.isSuperAdmin],controller.registerCompany);
+  app.get( "/api/company/all",[authJwt.verifyToken,authJwt.isSuperAdmin],controller.companyList);
+  app.put( "/api/company/status/:id",[authJwt.verifyToken,authJwt.isSuperAdmin],controller.selectedCompanyStatusChange);
+  app.delete( "/api/company/delete/:id",[authJwt.verifyToken,authJwt.isSuperAdmin],controller.deleteSelectedCompany);
 
 };
