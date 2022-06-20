@@ -3,7 +3,7 @@ import {Row, Col, Image, Form, Button, FormCheck, Alert, Modal} from 'react-boot
 import Card from '../../../components/Card'
 import * as yup from "yup";
 import { Formik } from "formik";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 import {catalogRecordRegister} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
@@ -17,7 +17,7 @@ const schema = yup.object().shape({
 
 });
 const AdminAdd =() =>{
-
+   const navigate = useNavigate();
    const { auth } = useAuth();
 
    const [companyList,setCompanyList]=useState([])
@@ -49,13 +49,16 @@ const AdminAdd =() =>{
             setErrMsg('No Server Response');
             setErrCode(500);
          } else if (err.response?.status === 400) {
-            setErrMsg('User already registered');
+            setErrMsg('Catalog already inserted');
             setErrCode(400);
          } else if (err.response?.status === 401) {
-            setErrMsg('Registration Failed');
+            setErrMsg('Catalog insertion Failed');
             setErrCode(401);
+         }else if (err.response?.status === 403) {
+            navigate("/auth")
+            setErrCode(403);
          } else {
-            setErrMsg('Registration Failed');
+            setErrMsg('Catalog insertion Failed');
          }
          // errRef.current.focus();
       }

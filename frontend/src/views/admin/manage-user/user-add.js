@@ -3,7 +3,7 @@ import {Row, Col, Image, Form, Button, FormCheck, Alert, Modal} from 'react-boot
 import Card from '../../../components/Card'
 import * as yup from "yup";
 import { Formik } from "formik";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 import {registerAdminOrUser,companyListData} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
@@ -18,7 +18,7 @@ const schema = yup.object().shape({
 
 });
 const AdminAdd =() =>{
-
+    const navigate = useNavigate();
     const { auth } = useAuth();
 
     useEffect(() => {
@@ -56,6 +56,9 @@ const AdminAdd =() =>{
             } else if (err.response?.status === 401) {
                 setErrMsg('Registration Failed');
                 setErrCode(401);
+            }else if (err.response?.status === 403) {
+                navigate("/auth")
+                setErrCode(403);
             } else {
                 setErrMsg('Registration Failed');
             }

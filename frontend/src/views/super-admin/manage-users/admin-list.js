@@ -21,7 +21,8 @@ const schema = yup.object().shape({
 
 
 });
-const UserList = ({id, username, email, active, password, isAdmin, isRUser}) =>{
+const UserList = () =>{
+
    const navigate = useNavigate();
    //edit model
    const [show, setShow] = useState(false);
