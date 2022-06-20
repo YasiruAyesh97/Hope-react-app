@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Image, Button, Modal, Form, FormCheck} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Row, Col, Button, Modal, Form, FormCheck} from 'react-bootstrap'
 import Card from '../../../components/Card'
-
 
 import {catalog3DataFetch,selectedCatalog3StatusUpdate,selectedCatalog3Delete} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
-
 
 const UserList =() =>{
     const { auth } = useAuth();
@@ -14,13 +11,17 @@ const UserList =() =>{
     const [catalog1List,setCatalog1List]=useState([])
     //initial data load
     useEffect(() => {
-        getCatalog1DataList();
+        getCatalog3DataList();
     }, [])
 
-    async function getCatalog1DataList(){
+    async function getCatalog3DataList(){
 
-        const {data:company} =await catalog3DataFetch(auth.companyId);
-        setCatalog1List(company)
+      try{
+          const {data:company} =await catalog3DataFetch(auth.companyId);
+          setCatalog1List(company)
+      }catch (e) {
+
+      }
 
     }
 
@@ -34,8 +35,6 @@ const UserList =() =>{
         setSelectRow(item)
         setShow1(true)
     };
-
-
 
     //delete record
     const  deleteRecord= async () =>{
@@ -160,8 +159,6 @@ const UserList =() =>{
                                         <Button variant="danger"  onClick={deleteRecord}>Delete</Button>
                                     </Modal.Footer>
                                 </Modal>
-
-
 
                             </Card.Body>
                         </Card>

@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 //router
-// import IndexRouters from "./router/index"
+
 import Layout from './components/Layout';
 import DashboardLayOut from '../src/layouts/dashboard/default2';
 //Public
@@ -87,26 +87,6 @@ function App() {
                       </Route>
                   </Route>
               </Route>
-
-               {/*super admin*/}
-              {/*<Route path="dashboard" element={<DashboardLayOut />} >*/}
-              {/*    <Route path="adminlist"  element={<SuperAdminList />}/>*/}
-              {/*    <Route path="adminadd"  element={<SuperAdminAdd />}/>*/}
-
-              {/*    <Route path="catalog" element={<CatalogDataAdd />} />*/}
-              {/*    <Route path="cataloglist1" element={<CatalogList1 />} />*/}
-
-              {/*    <Route path="doc" element={<DocumentAdd />} />*/}
-              {/*</Route>*/}
-
-              {/*admin*/}
-
-
-              {/*<Route path="dashboard/app/user-list"  element={<UserList />}/>*/}
-              {/*</Route>*/}
-
-              {/*<Route path="/dashboard/app/user-list"  element={<UserList />} />*/}
-
 
               {/* catch all */}
               <Route path="*" element={<Error404 />} />

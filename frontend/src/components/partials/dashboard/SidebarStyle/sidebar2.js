@@ -3,11 +3,6 @@ import { Link } from 'react-router-dom'
 import VerticalNav from '../SidebarStyle/vertical-nav2'
 import Scrollbar from 'smooth-scrollbar'
 import {bindActionCreators} from "redux"
-// import SidebarDark from '../../components/settingoffcanvas'
-
-// export const SidebarDark =() =>{
-
-// }
 
 // store
 import {NavbarstyleAction, getDirMode, SchemeDirAction,  getNavbarStyleMode, getSidebarActiveMode, SidebarActiveStyleAction, getDarkMode, ModeAction,  SidebarColorAction, getSidebarColorMode, getSidebarTypeMode} from '../../../../store/setting/setting'
@@ -76,14 +71,14 @@ const Sidebar = (props) => {
         <>
             <aside className="sidebar sidebar-default navs-rounded-all {{ sidebarVariants }}">
                 <div className="sidebar-header d-flex align-items-center justify-content-start">
-                    <Link to="/dashboard" className="navbar-brand">
+                    <Link to="/" className="navbar-brand">
                         <svg width="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"/>
                             <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"/>
                             <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"/>
                             <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
                         </svg>
-                        <h4 className="logo-title">Hope 12</h4>
+                        <h4 className="logo-title">Hope</h4>
                     </Link>
                     <div className="sidebar-toggle" data-toggle="sidebar" data-active="true" onClick={minisidebar} >
                         <i className="icon">

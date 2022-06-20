@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Image, Button, Modal, Form, FormCheck} from 'react-bootstrap'
-import {Link, useNavigate} from 'react-router-dom'
+import {Row, Col, Button, Modal, Form, FormCheck} from 'react-bootstrap'
+import {useNavigate} from 'react-router-dom'
 import Card from '../../../components/Card'
 
 import {Formik} from "formik";
 import * as yup from "yup";
 import {
    adminRegularUserData,
-   companyListData,
    selectedUserDataFetch,
    selectedUserDataDelete,
    selectedRegularUserOrAdminUpdate
@@ -16,7 +15,7 @@ import {
 const schema = yup.object().shape({
 
    email: yup.string().required(),
-   password: yup.string().required(),
+   password: yup.string().required().min(8),
    roles:yup.boolean().oneOf([true],'at least one role is required').required()
 
 

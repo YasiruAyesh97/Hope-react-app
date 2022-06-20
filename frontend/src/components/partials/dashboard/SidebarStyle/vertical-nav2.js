@@ -3,13 +3,10 @@ import { Link, useLocation} from 'react-router-dom'
 import {Accordion, useAccordionButton, AccordionContext} from 'react-bootstrap'
 import useAuth from "../../../../hooks/useAuth";
 
-
 function CustomToggle({ children, eventKey, onClick }) {
 
     const { activeEventKey } = useContext(AccordionContext);
-
     const decoratedOnClick = useAccordionButton(eventKey, (active) => onClick({state: !active, eventKey: eventKey}));
-
     const isCurrentEventKey = activeEventKey === eventKey;
   
     return (
@@ -24,12 +21,11 @@ const ROLES = {
     'SuperAdmin':'ROLE_SUPERADMIN',
     'Admin':'ROLE_ADMIN',
     'User': 'ROLE_USER',
-
 }
+
 const VerticalNav = () => {
     const { auth } = useAuth();
     const allowedRoles = auth.roles
-    console.log("allowedRoles HHHHH : "+allowedRoles)
     const [activeMenu, setActiveMenu] = useState(false)
     //location
     let location = useLocation();
@@ -97,7 +93,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> E </i>
+                                                <i className="sidenav-mini-icon"> C </i>
                                                 <span className="item-name">Add User</span>
                                             </Link>
                                         </li>
@@ -110,7 +106,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> U </i>
+                                                <i className="sidenav-mini-icon"> R </i>
                                                 <span className="item-name">User List</span>
                                             </Link>
                                         </li>
@@ -157,7 +153,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> C </i>
+                                                <i className="sidenav-mini-icon"> R </i>
                                                 <span className="item-name">Company List</span>
                                             </Link>
                                         </li>
@@ -208,7 +204,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> U </i>
+                                                <i className="sidenav-mini-icon"> C </i>
                                                 <span className="item-name">Add User</span>
                                             </Link>
                                         </li>
@@ -221,7 +217,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> U </i>
+                                                <i className="sidenav-mini-icon"> R </i>
                                                 <span className="item-name">User List</span>
                                             </Link>
                                         </li>
@@ -256,7 +252,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> E </i>
+                                                <i className="sidenav-mini-icon"> R </i>
                                                 <span className="item-name">Catalog 1</span>
                                             </Link>
                                         </li>
@@ -269,7 +265,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> U </i>
+                                                <i className="sidenav-mini-icon"> R </i>
                                                 <span className="item-name">Catalog 2</span>
                                             </Link>
                                         </li>
@@ -282,7 +278,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> U </i>
+                                                <i className="sidenav-mini-icon"> R </i>
                                                 <span className="item-name">Catalog 3</span>
                                             </Link>
                                         </li>
@@ -295,7 +291,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> U </i>
+                                                <i className="sidenav-mini-icon"> C </i>
                                                 <span className="item-name">Catalog Add</span>
                                             </Link>
                                         </li>
@@ -335,7 +331,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> E </i>
+                                                <i className="sidenav-mini-icon"> C </i>
                                                 <span className="item-name">Document Add </span>
                                             </Link>
                                         </li>
@@ -348,7 +344,7 @@ const VerticalNav = () => {
                                                         </g>
                                                     </svg>
                                                 </i>
-                                                <i className="sidenav-mini-icon"> U </i>
+                                                <i className="sidenav-mini-icon"> R </i>
                                                 <span className="item-name">Document List</span>
                                             </Link>
                                         </li>
@@ -361,7 +357,6 @@ const VerticalNav = () => {
                 })()}
 
                 {/*moderator Document*/}
-
 
             </Accordion>
        </>

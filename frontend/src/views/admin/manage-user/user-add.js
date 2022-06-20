@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Image, Form, Button, FormCheck, Alert, Modal} from 'react-bootstrap'
+import {Row, Col, Form, Button, FormCheck, Alert, Modal} from 'react-bootstrap'
 import Card from '../../../components/Card'
 import * as yup from "yup";
 import { Formik } from "formik";
-import {Link, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
-import {registerAdminOrUser,companyListData} from "../../../service/web/userService";
+import {registerAdminOrUser} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
 
 
@@ -13,25 +13,22 @@ const schema = yup.object().shape({
 
     email: yup.string().required(),
     username: yup.string().required(),
-    password: yup.string().required(),
+    password: yup.string().required().min(8),
 
 
 });
 const AdminAdd =() =>{
+
     const navigate = useNavigate();
     const { auth } = useAuth();
 
     useEffect(() => {
-
         setErrMsg('');
         setErrCode(0);
     }, [])
 
-
     const [errMsg, setErrMsg] = useState('');
     const [errCode, setErrCode] = useState(0);
-
-
 
     const handleSubmit = async (values,{resetForm }) => {
         try {
@@ -39,7 +36,6 @@ const AdminAdd =() =>{
             const response = await registerAdminOrUser(values.email,values.username,values.password,auth.companyId);
 
             if(response){
-
                 setErrCode(200);
                 setErrMsg('Registration successful');
                 resetForm({})
@@ -62,7 +58,6 @@ const AdminAdd =() =>{
             } else {
                 setErrMsg('Registration Failed');
             }
-            // errRef.current.focus();
         }
     }
     return(
@@ -79,7 +74,7 @@ const AdminAdd =() =>{
                                 <Row className="justify-content-center">
                                     <Col className="justify-content-center">
 
-                                        {errCode==200?<Alert variant="success d-flex align-items-center" role="alert">
+                                        {errCode===200?<Alert variant="success d-flex align-items-center" role="alert">
 
                                             <svg className="me-2" id="check-circle-fill" width="20" fill="currentColor" viewBox="0 0 16 16">
                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
@@ -88,7 +83,7 @@ const AdminAdd =() =>{
                                                 {errMsg}
                                             </div>
                                         </Alert>:null}
-                                        {errCode==500?<Alert variant="danger d-flex align-items-center" role="alert">
+                                        {errCode===500?<Alert variant="danger d-flex align-items-center" role="alert">
                                             <svg className="me-2" id="exclamation-triangle-fill" fill="currentColor" width="20" viewBox="0 0 16 16">
                                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
                                             </svg>
@@ -97,7 +92,7 @@ const AdminAdd =() =>{
                                             </div>
                                         </Alert>:null}
 
-                                        {errCode==400||errCode==401? <Alert variant="warning d-flex align-items-center" role="alert">
+                                        {errCode===400||errCode===401? <Alert variant="warning d-flex align-items-center" role="alert">
                                             <svg className="me-2" id="exclamation-triangle-fill" fill="currentColor" width="20" viewBox="0 0 16 16">
                                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
                                             </svg>
@@ -124,17 +119,12 @@ const AdminAdd =() =>{
                                             companyId:"",
                                             password:"",
 
-
-
                                         }}
                                     >
                                         {({
                                               handleSubmit,
                                               handleReset,
                                               handleChange,
-
-                                              setFieldValue,
-
                                               values,
                                               touched,
                                               errors }) => (
@@ -148,7 +138,7 @@ const AdminAdd =() =>{
                                                             type="text"
                                                             id="username"
                                                             name="username"
-                                                            placeholder="Enter username"
+                                                            placeholder=" "
                                                             value={values.username}
                                                             onChange={handleChange("username")}
                                                             isValid={touched.username && !errors.username}
@@ -166,7 +156,7 @@ const AdminAdd =() =>{
                                                             type="text"
                                                             id="email"
                                                             name="email"
-                                                            placeholder="Enter Email address"
+                                                            placeholder=" "
                                                             value={values.email}
                                                             onChange={handleChange("email")}
                                                             isValid={touched.email && !errors.email}
@@ -184,7 +174,7 @@ const AdminAdd =() =>{
                                                             type="password"
                                                             id="password"
                                                             name="password"
-                                                            placeholder="Enter Password"
+                                                            placeholder=" "
                                                             value={values.password}
                                                             onChange={handleChange("password")}
                                                             isValid={touched.password && !errors.password}
@@ -195,9 +185,6 @@ const AdminAdd =() =>{
                                                         </Form.Control.Feedback>
 
                                                     </Form.Group>
-
-
-
 
                                                 </div>
                                                 <Button type="submit" variant="btn btn-primary">Submit</Button>{' '}

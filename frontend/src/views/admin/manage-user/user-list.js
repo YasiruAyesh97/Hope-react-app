@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Image, Button, Modal, Form, FormCheck} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Row, Col, Button, Modal, Form, FormCheck} from 'react-bootstrap'
 import Card from '../../../components/Card'
 import {Formik} from "formik";
 import * as yup from "yup";
@@ -19,7 +18,6 @@ const schema = yup.object().shape({
    companyId: yup.string().required("Company is required"),
    roles:yup.boolean().oneOf([true],'at least one role is required').required()
 
-
 });
 
 
@@ -33,9 +31,12 @@ const UserList =() =>{
    }, [])
 
    async function getRegularUserDataList(){
-      const {data:user} =await RegularUserDataFetch(auth.companyId);
-      setRegularUserList(user)
-
+      try{
+         const {data:user} =await RegularUserDataFetch(auth.companyId);
+         setRegularUserList(user)
+      }catch (err) {
+         console.log("error in fetching users record"+err)
+      }
    }
 
 
@@ -49,8 +50,6 @@ const UserList =() =>{
       isRUser:false,
       roles:false,
       status:false,
-
-
    })
 
    //edit model

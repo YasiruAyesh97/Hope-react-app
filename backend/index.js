@@ -17,17 +17,7 @@ const UserRole = db.users_roles;
 const Company = db.company;
 
 // Routers
-const rubroRouter = require('./routes/Rubros')
-app.use("/rubros", rubroRouter);
 
-const clienteRouter = require('./routes/Clientes')
-app.use("/clientes", clienteRouter);
-
-const competenciaRouter = require('./routes/Competencias')
-app.use("/competencias", competenciaRouter);
-
-const evidenciaRouter = require('./routes/Evidencias')
-app.use("/evidencias", evidenciaRouter);
 
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Image, Button, Modal, Form, FormCheck} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Row, Col, Button, Modal, Form, FormCheck} from 'react-bootstrap'
 import Card from '../../../components/Card'
 
 
@@ -8,7 +7,6 @@ import {companyListData,selectedCompanyStatusUpdate,selectedCompanyDelete} from 
 
 
 const UserList =() =>{
-
    //initial record
    const [companyList,setCompanyList]=useState([])
    //initial data load
@@ -34,11 +32,8 @@ const UserList =() =>{
       setShow1(true)
    };
 
-
-
    //delete record
    const  deleteRecord= async () =>{
-      console.log("delete called :"+selectRow.id)
       try{
          const response =await selectedCompanyDelete(selectRow.id)
          if(response){
@@ -56,18 +51,16 @@ const UserList =() =>{
 
    //handle toggle
    const  handleToggle=async (item,idx)=>{
-      console.log("handleToggle called")
       //update db api
         try{
            const response = await selectedCompanyStatusUpdate(item.id)
            if(response){
               let newArr = [...companyList];
               newArr[idx]['status']= newArr[idx]['status']?0:1
-              console.log("newGender : "+newArr)
               setCompanyList(newArr)
            }
         }catch (err) {
-           console.log("error in delete record"+err)
+
         }
 
    }
@@ -159,8 +152,6 @@ const UserList =() =>{
                                <Button variant="danger"  onClick={deleteRecord}>Delete</Button>
                             </Modal.Footer>
                          </Modal>
-
-
 
                       </Card.Body>
                    </Card>

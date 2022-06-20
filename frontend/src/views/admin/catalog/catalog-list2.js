@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Image, Button, Modal, Form, FormCheck} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Row, Col, Button, Modal, Form, FormCheck} from 'react-bootstrap'
 import Card from '../../../components/Card'
-
 
 import {catalog2DataFetch,selectedCatalog2StatusUpdate,selectedCatalog2Delete} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
@@ -35,11 +33,8 @@ const UserList =() =>{
       setShow1(true)
    };
 
-
-
    //delete record
    const  deleteRecord= async () =>{
-
       try{
          const response =await selectedCatalog2Delete(selectRow.id)
          if(response){
@@ -88,11 +83,8 @@ const UserList =() =>{
                             <table id="user-list-table" className="table table-striped" role="grid" data-toggle="data-table">
                                <thead>
                                <tr className="ligth">
-
                                   <th>Name</th>
-
                                   <th>Status</th>
-
                                   <th> Date</th>
                                   <th min-width= "100px">Action</th>
                                </tr>
@@ -160,8 +152,6 @@ const UserList =() =>{
                                <Button variant="danger"  onClick={deleteRecord}>Delete</Button>
                             </Modal.Footer>
                          </Modal>
-
-
 
                       </Card.Body>
                    </Card>

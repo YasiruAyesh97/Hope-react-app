@@ -1,12 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Image, Button, Modal, Form, FormCheck} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Row, Col, Button, Modal, Form, FormCheck} from 'react-bootstrap'
 import Card from '../../../components/Card'
-
-
 import {documentListDataFetch,selectedDocumentStatusUpdate,selectedDocumentDelete} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
-
 
 const UserList =() =>{
    const { auth } = useAuth();
@@ -18,11 +14,8 @@ const UserList =() =>{
    }, [])
 
    async function getDocumentDataList(){
-      console.log("getDocumentDataList called :"+JSON.stringify(auth))
       const {data:doc} =await documentListDataFetch(auth.companyId);
       setDocumentList(doc)
-      console.log("document :")
-      console.log(doc)
    }
 
    //handle delete
@@ -37,14 +30,12 @@ const UserList =() =>{
    };
 
 
-
    //delete record
    const  deleteRecord= async () =>{
       console.log("delete called :"+selectRow.id)
       try{
          const response =await selectedDocumentDelete(selectRow.id)
          if(response){
-
             let newArr = [...documentList];
             const result = newArr.filter(item => item.id != selectRow.id);
             setDocumentList(result)
@@ -58,14 +49,13 @@ const UserList =() =>{
 
    //handle toggle
    const  handleToggle=async (item,idx)=>{
-      console.log("handleToggle called")
+
       //update db api
       try{
          const response = await selectedDocumentStatusUpdate(item.id)
          if(response){
             let newArr = [...documentList];
             newArr[idx]['status']= newArr[idx]['status']?0:1
-            console.log("newGender : "+newArr)
             setDocumentList(newArr)
          }
       }catch (err) {
@@ -167,8 +157,6 @@ const UserList =() =>{
                                <Button variant="danger"  onClick={deleteRecord}>Delete</Button>
                             </Modal.Footer>
                          </Modal>
-
-
 
                       </Card.Body>
                    </Card>

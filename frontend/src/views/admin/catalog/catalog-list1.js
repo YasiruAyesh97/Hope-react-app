@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Image, Button, Modal, Form, FormCheck} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Row, Col, Button, Modal, Form, FormCheck} from 'react-bootstrap'
 import Card from '../../../components/Card'
-
 
 import {catalog1DataFetch,selectedCatalog1StatusUpdate,selectedCatalog1Delete} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
-
 
 const UserList =() =>{
    const { auth } = useAuth();
@@ -34,8 +31,6 @@ const UserList =() =>{
       setShow1(true)
    };
 
-
-
    //delete record
    const  deleteRecord= async () =>{
       try{
@@ -61,7 +56,6 @@ const UserList =() =>{
          if(response){
             let newArr = [...catalog1List];
             newArr[idx]['status']= newArr[idx]['status']?0:1
-
             setCatalog1List(newArr)
          }
       }catch (err) {
@@ -85,12 +79,9 @@ const UserList =() =>{
                             <table id="user-list-table" className="table table-striped" role="grid" data-toggle="data-table">
                                <thead>
                                <tr className="ligth">
-
                                   <th>Name</th>
-
                                   <th>Status</th>
-
-                                  <th> Date</th>
+                                  <th>Date</th>
                                   <th min-width= "100px">Action</th>
                                </tr>
                                </thead>
