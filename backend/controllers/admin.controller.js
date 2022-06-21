@@ -6,13 +6,13 @@ const Company = db.company;
 const Users_Roles = db.users_roles;
 const Role = db.role;
 const Op = db.Sequelize.Op;
-
+const bcrypt = require("bcryptjs");
 
 
 
 exports.regularUserRegister = async (req, res) => {
     // Save User to Database
-    //   return res.status(200).send(req.body.email);
+    console.log(JSON.stringify(req.body));
     try{
 
         let regularuserrole =await Role.findOne({
@@ -53,7 +53,7 @@ exports.regularUserRegister = async (req, res) => {
             });
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 
@@ -75,6 +75,7 @@ exports.regularUsersList = async (req, res) => {
         const user_role =await Users_Roles.findAll({
             where: {
                 roleId :role.id,
+
 
             }
         })

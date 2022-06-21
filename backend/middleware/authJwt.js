@@ -41,11 +41,14 @@ isSuperAdmin = (req, res, next) => {
         message: "Se requiere rol admin!"
       });
       return;
+    }) .catch(err => {
+      res.status(500).send({ message: err.message });
     });
   });
 };
 
 isAdmin = (req, res, next) => {
+
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
@@ -57,7 +60,9 @@ isAdmin = (req, res, next) => {
       res.status(403).send({
         message: "Se requiere rol moderador!"
       });
-    });
+    }) .catch(err => {
+      res.status(500).send({ message: err.message });
+    });;
   });
 };
 
@@ -77,7 +82,9 @@ isUser = (req, res, next) => {
       res.status(403).send({
         message: "Se requiere un rol de moderador o de admin!"
       });
-    });
+    }) .catch(err => {
+      res.status(500).send({ message: err.message });
+    });;
   });
 };
 
@@ -97,7 +104,9 @@ isAdminOrUser = (req, res, next) => {
       res.status(403).send({
         message: "Se requiere un rol de moderador o de admin!"
       });
-    });
+    }) .catch(err => {
+      res.status(500).send({ message: err.message });
+    });;
   });
 };
 

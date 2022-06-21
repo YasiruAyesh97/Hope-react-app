@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { Formik } from "formik";
 import {useNavigate} from 'react-router-dom'
 
-import {registerAdminOrUser} from "../../../service/web/userService";
+import {registerRegularUser} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
 
 
@@ -33,7 +33,7 @@ const AdminAdd =() =>{
     const handleSubmit = async (values,{resetForm }) => {
         try {
 
-            const response = await registerAdminOrUser(values.email,values.username,values.password,auth.companyId);
+            const response = await registerRegularUser(values.email,values.username,values.password,auth.companyId);
 
             if(response){
                 setErrCode(200);

@@ -110,9 +110,10 @@ const UserList =() =>{
 
    //handle toggle
    const  handleToggle=async (item,idx)=>{
-
+      console.log("handleToggle called: ")
       try{
          const response = await selectedRegularUserStatusUpdate(item.id)
+         console.log("response : "+JSON.stringify(response))
          if(response){
             let newArr = [...regularUserList];
             newArr[idx]['status']= newArr[idx]['status']?0:1
@@ -120,7 +121,7 @@ const UserList =() =>{
             setRegularUserList(newArr)
          }
       }catch (err) {
-         console.log("error in delete record"+err)
+         console.log("error in toggle record"+err)
       }
 
    }
