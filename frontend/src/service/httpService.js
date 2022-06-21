@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getJwt} from "../service/web/userService";
+import {getJwt} from "./web/userService";
 axios.defaults.headers.common['x-access-token']=getJwt();
 export default {
     get:axios.get,

@@ -71,7 +71,7 @@ function initial() {
                    User.create({
                      "username": "superadmin",
                      "email": "superadmin@gmail.com",
-                     "password":  bcrypt.hashSync("1234", 8),
+                     "password":  bcrypt.hashSync("AaBa123#", 8),
                      "companyId": company.id,
                    }).then(user=>{
 

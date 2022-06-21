@@ -89,7 +89,7 @@ const AdminAdd =() =>{
                         <Card>
                             <Card.Header className="d-flex justify-content-between">
                                 <div className="header-title">
-                                    <h4 className="card-title">New User Information</h4>
+                                    <h4 className="card-title">New Document Information</h4>
                                 </div>
                                 <br/>
                                 <Row className="justify-content-center">

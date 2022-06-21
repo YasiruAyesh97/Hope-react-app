@@ -15,7 +15,13 @@ import {
 const schema = yup.object().shape({
 
    email: yup.string().required(),
-   password: yup.string().required().min(8),
+   password: yup.string()
+       .required("Password is required")
+       .matches(
+           /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+           "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+       )
+       .label("Password"),
    roles:yup.boolean().oneOf([true],'at least one role is required').required()
 
 

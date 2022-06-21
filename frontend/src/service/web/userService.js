@@ -1,24 +1,24 @@
-import http from '../httpService';
+// import http from '../httpService';
 import jwtDecode from "jwt-decode";
+import axios from "axios";
+const config = require("../../../config.json");
 
-const  BASEURL =  'http://localhost:3001'
+const  BASEURL =  config["BASEURL"]
 
 
 export async function login(email,password){
-    console.log("caled :")
-    const {data:jwt} =await http.post(`${BASEURL}`+'/'+'api/auth/signin',{email,password});
+    const {data:jwt} =await axios.post(`${BASEURL}`+'/'+'api/auth/signin',{email,password});
 
     //
     if(jwt){
 
-        // console.log("TOKEN2 :"+TOKEN)
         const id = jwtDecode(jwt).id;
         const username = jwtDecode(jwt).username;
         const email = jwtDecode(jwt).email;
         const roles = jwtDecode(jwt).roles;
         const companyId = jwtDecode(jwt).companyId;
         const  accessToken = jwt;
-        localStorage.setItem('token',accessToken);
+        sessionStorage.setItem('userToken',accessToken);
         return { id,username, email, roles, accessToken,companyId };
 
     }
@@ -26,124 +26,205 @@ export async function login(email,password){
 }
 
 export async function registerAdminOrUser(email,username,password,companyId,checkadmin,checkuser) {
-  return await http.post(`${BASEURL}`+'/'+'api/auth/signup',{email,username,password,companyId,checkadmin,checkuser});
+  return await axios.post(`${BASEURL}`+'/'+'api/auth/signup',{email,username,password,companyId,checkadmin,checkuser},{
+      headers: {
+          'x-access-token': sessionStorage.getItem('userToken')
+      }});
 }
 //
 export function registerCompany(name){
-  return  http.post(`${BASEURL}`+'/'+'api/company/register',{name});
+  return  axios.post(`${BASEURL}`+'/'+'api/company/register',{name},{
+      headers: {
+          'x-access-token': sessionStorage.getItem('userToken')
+      }});
 }
 
 
 export function companyListData(){
-    return  http.get(`${BASEURL}`+'/'+'api/company/all');
+    return  axios.get(`${BASEURL}`+'/'+'api/company/all',{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function adminRegularUserData(){
-    return  http.get(`${BASEURL}`+'/'+'api/super-admin/user-list');
+    return  axios.get(`${BASEURL}`+'/'+'api/super-admin/user-list',{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 export function selectedUserDataFetch(id){
-    return  http.post(`${BASEURL}`+'/'+'api/super-admin/selected-user',{id});
+    return  axios.post(`${BASEURL}`+'/'+'api/super-admin/selected-user',{id},{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 export function selectedRegularUserOrAdminUpdate(id,username,email,password,status,isAdmin,isRUser){
-    console.log(id,username,email,status,password,isAdmin,isRUser)
-    return  http.put(`${BASEURL}`+'/'+'api/super-admin/edit-user'+'/'+id,{username, email, password,status, isAdmin, isRUser});
+    return  axios.put(`${BASEURL}`+'/'+'api/super-admin/edit-user'+'/'+id,{username, email, password,status, isAdmin, isRUser},{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function selectedUserDataDelete(id){
-    return  http.delete(`${BASEURL}`+'/'+'api/super-admin/delete-user'+'/'+id);
+    return  axios.delete(`${BASEURL}`+'/'+'api/super-admin/delete-user'+'/'+id),{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }};
 }
 
 export function selectedCompanyStatusUpdate(id){
-    return  http.put(`${BASEURL}`+'/'+'api/company/status'+'/'+id);
+    return  axios.put(`${BASEURL}`+'/'+'api/company/status'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 export function selectedCompanyDelete(id){
-    return  http.delete(`${BASEURL}`+'/'+'api/company/delete'+'/'+id);
+    return  axios.delete(`${BASEURL}`+'/'+'api/company/delete'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 //admin
 export function RegularUserDataFetch(companyId){
-    return  http.get(`${BASEURL}`+'/'+'api/admin/user-list'+'/'+companyId);
+    return  axios.get(`${BASEURL}`+'/'+'api/admin/user-list'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function selectedRegularUserDelete(id){
-    return  http.delete(`${BASEURL}`+'/'+'api/admin/delete-user'+'/'+id);
+    return  axios.delete(`${BASEURL}`+'/'+'api/admin/delete-user'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function selectedRegularUserStatusUpdate(id){
-    return  http.put(`${BASEURL}`+'/'+'api/admin/status'+'/'+id);
+    return  axios.put(`${BASEURL}`+'/'+'api/admin/status'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 
 export function catalogRecordRegister(type,name,companyId){
-    return  http.post(`${BASEURL}`+'/'+'api/catalog'+`${type}`+'/insert',{name,companyId});
+    return  axios.post(`${BASEURL}`+'/'+'api/catalog'+`${type}`+'/insert',{name,companyId},{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 //catalog 1
 export function catalog1DataFetch(companyId){
-    return  http.get(`${BASEURL}`+'/'+'api/catalog1/all'+'/'+companyId);
+    return  axios.get(`${BASEURL}`+'/'+'api/catalog1/all'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function selectedCatalog1StatusUpdate(id){
-    return  http.put(`${BASEURL}`+'/'+'api/catalog1/status'+'/'+id);
+    return  axios.put(`${BASEURL}`+'/'+'api/catalog1/status'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 export function selectedCatalog1Delete(id){
-    return  http.delete(`${BASEURL}`+'/'+'api/catalog1/delete'+'/'+id);
+    return  axios.delete(`${BASEURL}`+'/'+'api/catalog1/delete'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 //catalog 2
 export function catalog2DataFetch(companyId){
-    return  http.get(`${BASEURL}`+'/'+'api/catalog2/all'+'/'+companyId);
+    return  axios.get(`${BASEURL}`+'/'+'api/catalog2/all'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function selectedCatalog2StatusUpdate(id){
-    return  http.put(`${BASEURL}`+'/'+'api/catalog2/status'+'/'+id);
+    return  axios.put(`${BASEURL}`+'/'+'api/catalog2/status'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 export function selectedCatalog2Delete(id){
-    return  http.delete(`${BASEURL}`+'/'+'api/catalog2/delete'+'/'+id);
+    return  axios.delete(`${BASEURL}`+'/'+'api/catalog2/delete'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 //catalog 3
 export function catalog3DataFetch(companyId){
-    return  http.get(`${BASEURL}`+'/'+'api/catalog3/all'+'/'+companyId);
+    return  axios.get(`${BASEURL}`+'/'+'api/catalog3/all'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function selectedCatalog3StatusUpdate(id){
-    return  http.put(`${BASEURL}`+'/'+'api/catalog3/status'+'/'+id);
+    return  axios.put(`${BASEURL}`+'/'+'api/catalog3/status'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 export function selectedCatalog3Delete(id){
-    return  http.delete(`${BASEURL}`+'/'+'api/catalog3/delete'+'/'+id);
+    return  axios.delete(`${BASEURL}`+'/'+'api/catalog3/delete'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 //document
 export function documentListDataFetch(companyId){
-    return  http.get(`${BASEURL}`+'/'+'api/document/all'+'/'+companyId);
+    return  axios.get(`${BASEURL}`+'/'+'api/document/all'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function selectedDocumentDelete(id){
-    return  http.delete(`${BASEURL}`+'/'+'api/document/delete'+'/'+id);
+    return  axios.delete(`${BASEURL}`+'/'+'api/document/delete'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 export function selectedDocumentStatusUpdate(id){
-    return  http.put(`${BASEURL}`+'/'+'api/document/status'+'/'+id);
+    return  axios.put(`${BASEURL}`+'/'+'api/document/status'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 
 export function documentRecordInsert(name,dueDate,agentName,catalog1Id,catalog2Id,catalog3Id,companyId,userId){
-    return  http.post(`${BASEURL}`+'/'+'api/document/insert',{name,dueDate,agentName,catalog1Id,catalog2Id,catalog3Id,companyId,userId});
+    return  axios.post(`${BASEURL}`+'/'+'api/document/insert',{name,dueDate,agentName,catalog1Id,catalog2Id,catalog3Id,companyId,userId},{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function expiresSoonDocumentListDataFetch(companyId){
-    return  http.get(`${BASEURL}`+'/'+'api/document/expiresoon'+'/'+companyId);
+
+    return  axios.get(`${BASEURL}`+'/'+'api/document/expiresoon'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
 }
 
 export function logout(){
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('userToken');
 }
 export function getJwt(){
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('userToken');
 }
 
 
 export function getDecodeJwt(){
 
-    const jwt =localStorage.getItem('token')
+    const jwt =sessionStorage.getItem('userToken')
     const id = jwtDecode(jwt).id;
     const username = jwtDecode(jwt).username;
     const email = jwtDecode(jwt).email;

@@ -17,10 +17,14 @@ const schema = yup.object().shape({
        .label("Email"),
    password: yup.string()
        .required("Password is required")
-       .min(8)
+       .matches(
+           /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+           "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+       )
        .label("Password"),
 
 });
+
 
 const Login = () => {
    const { setAuth } = useAuth();
@@ -85,7 +89,7 @@ const Login = () => {
                                      <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"/>
                                      <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
                                   </svg>
-                                  <h4 className="logo-title ms-3">POC</h4>
+                                  <h4 className="logo-title ms-3"></h4>
                                </Link>
                                <h2 className="mb-2 text-center">Sign In</h2>
                                <p className="text-center">Login to stay connected.</p>
@@ -111,7 +115,7 @@ const Login = () => {
 
 
                                <Formik
-                                   // validationSchema={schema}
+                                   validationSchema={schema}
                                    onSubmit={handleSubmit}
 
                                    initialValues={{

@@ -12,7 +12,6 @@ verifyToken = (req, res, next) => {
   }
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      console.log("err : "+err)
       return res.status(403).send({
         message: "Invalid token"
       });
@@ -33,7 +32,7 @@ isSuperAdmin = (req, res, next) => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "superadmin") {
-          console.log("admin comes")
+          console.log("superadmin comes")
           next();
           return;
         }
