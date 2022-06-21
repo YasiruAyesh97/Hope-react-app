@@ -11,7 +11,7 @@ module.exports = function(app) {
   });
 
   app.post( "/api/catalog1/insert",[authJwt.verifyToken,authJwt.isAdmin],controller.insertCatalog1);
-  app.get( "/api/catalog1/all/:companyId",[authJwt.verifyToken,authJwt.isAdmin],controller.Catalog1List);
+  app.get( "/api/catalog1/all/:companyId",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.Catalog1List);
   app.put( "/api/catalog1/status/:id",[authJwt.verifyToken,authJwt.isAdmin],controller.selectedCatalog1StatusChange);
   app.delete( "/api/catalog1/delete/:id",[authJwt.verifyToken,authJwt.isAdmin],controller.deleteSelectedCatalog);
 

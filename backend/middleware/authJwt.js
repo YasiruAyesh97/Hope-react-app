@@ -74,10 +74,6 @@ isUser = (req, res, next) => {
           next();
           return;
         }
-        if (roles[i].name === "admin") {
-          next();
-          return;
-        }
       }
       res.status(403).send({
         message: "Se requiere un rol de moderador o de admin!"
@@ -93,10 +89,6 @@ isAdminOrUser = (req, res, next) => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "user" ||roles[i].name === "admin") {
-          next();
-          return;
-        }
-        if (roles[i].name === "admin") {
           next();
           return;
         }
