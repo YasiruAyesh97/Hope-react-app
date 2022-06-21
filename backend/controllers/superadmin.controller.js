@@ -7,6 +7,8 @@ const Users_Roles = db.users_roles;
 const Role = db.role;
 const Op = db.Sequelize.Op;
 let bcrypt = require("bcryptjs");
+let {roleAdmin,roleRegularUser,superAdminEmail} = require('../config/default.js');
+
 
 exports.usersList = async (req, res) => {
     // Save User to Database
@@ -31,7 +33,7 @@ exports.usersList = async (req, res) => {
             include : { model: Company ,attributes: []},
             where: {
                 email: {
-                    [Op.not]: 'superadmin@gmail.com'
+                    [Op.not]: superAdminEmail
                 }
             }
 
@@ -43,7 +45,7 @@ exports.usersList = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 };
@@ -86,12 +88,12 @@ exports.selectedUser = async (req, res) => {
 
                 })
 
-                if(role.name ==='admin'){
+                if(role.name === roleAdmin){
                     console.log("role : "+role.name)
                     isAdmin=true
                     roles=true
                 }
-                if(role.name ==='user'){
+                if(role.name === roleRegularUser){
                     console.log("role : "+role.name)
                     isRUser=true
                     roles=true
@@ -149,7 +151,7 @@ exports.deleteSelectedUser = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 };
@@ -166,12 +168,12 @@ exports.selectedUserEdit = async (req, res) => {
 
         let adminrole =await Role.findOne({
             where: {
-                name:"admin"
+                name:roleAdmin
             }
         })
         let regularuserrole =await Role.findOne({
             where: {
-                name:"user"
+                name:roleRegularUser
             }
         })
 
@@ -209,7 +211,7 @@ exports.selectedUserEdit = async (req, res) => {
 
                             }).then(data=>{ console.log('Admin distroyee')})
                                .catch(err => {
-                                    console.log("Users_Roles admin error")
+
                                     return res.status(500).send({ message: err.message });
                                 });
                         }

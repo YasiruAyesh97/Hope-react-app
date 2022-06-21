@@ -33,7 +33,7 @@ exports.insertCatalog1 = async (req, res) => {
            });
 
    }catch(err) {
-       return res.status(500).send({ message: "Something wrrong" });
+       return res.status(500).send({ message: err.message });
    }
 
 };
@@ -67,7 +67,7 @@ exports.Catalog1List = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 };
@@ -127,7 +127,7 @@ exports.deleteSelectedCatalog = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 };

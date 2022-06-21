@@ -1,20 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 let bcrypt = require("bcryptjs");
-const app = express();
 
+const app = express();
 
 app.use(cors());
 // parse requests of content-type - application/json
 app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+let {superAdminCompany,roleSuperAdmin,roleAdmin,roleRegularUser,superAdminUsername,superAdminEmail,superAdminPassword} = require('./config/default.js');
 
 const db = require('./models')
 const Role = db.role;
 const User = db.user;
 const UserRole = db.users_roles;
 const Company = db.company;
+
+
 
 // Routers
 
@@ -41,37 +44,38 @@ db.sequelize.sync({alter:true}).then(() => {
 
 function initial() {
 
+  console.log("superAdminCompany ::::"+superAdminCompany)
   Company.findOne({
     where: {
-      name:"ABC"
+      name:superAdminCompany
     }
   }).then(c => {
      if(!c){
        Company.create({
-         name:"ABC"
+         name:superAdminCompany
        }).then(company => {
 
          Role.findOne({
            where: {
-             name:"superadmin"
+             name:roleSuperAdmin
            }
          }).then(role => {
            if(!role){
              Role.create({
-               name: "superadmin"
+               name: roleSuperAdmin
              }).then((role) => {
 
                User.findOne({
                  where: {
-                   email:"superadmin@gmail.com"
+                   email:superAdminEmail
                  }
 
                }).then(user => {
                  if(!user){
                    User.create({
-                     "username": "superadmin",
-                     "email": "superadmin@gmail.com",
-                     "password":  bcrypt.hashSync("AaBa123#", 8),
+                     "username": superAdminUsername,
+                     "email": superAdminEmail,
+                     "password":  bcrypt.hashSync(superAdminPassword, 8),
                      "companyId": company.id,
                    }).then(user=>{
 
@@ -81,7 +85,7 @@ function initial() {
                      })
                    })
                        .catch(err => {
-                         console.log("err in initial function"+err)
+                         console.log("err in initial function1"+err)
                        });
                  }
                }).catch(err => {
@@ -89,30 +93,29 @@ function initial() {
                });
 
 
-
              }).catch(err => {
-               console.log("err in initial function"+err)
+               console.log("err in initial function2"+err)
              });
            }
 
          }).catch(err => {
-           console.log("err in initial function"+err)
+           console.log("err in initial function3"+err)
          });
        })
      }
   }).catch(err => {
-        console.log("err in initial function"+err)
+        console.log("err in initial function4"+err)
    });
 
 
   Role.findOne({
     where: {
-      name:"admin"
+      name:roleAdmin
     }
   }).then(role => {
     if(!role){
       Role.create({
-        name: "admin"
+        name: roleAdmin
       });
     }
 
@@ -122,12 +125,12 @@ function initial() {
 
   Role.findOne({
     where: {
-      name:"user"
+      name:roleRegularUser
     }
   }).then(role => {
     if(!role){
       Role.create({
-        name: "user"
+        name: roleRegularUser
       });
     }
 
@@ -135,24 +138,5 @@ function initial() {
     console.log("err in initial function"+err)
   });
 
-  User.findOne({
-    where: {
-      email:"superadmin@gmail.com"
-    }
-  }).then(user => {
-    if(!user){
-      User.create({
-        "username": "superadmin",
-        "email": "superadmin@gmail.com",
-        "companyId": "",
-        "password": "1234",
-      }).then()
-          .catch(err => {
-        console.log("err in initial function"+err)
-      });
-    }
-  }).catch(err => {
-    console.log("err in initial function"+err)
-  });
 
 }

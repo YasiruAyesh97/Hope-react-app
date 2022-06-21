@@ -2,7 +2,7 @@ const {fn,col} = require('sequelize');
 const db = require("../models");
 const Company = db.company;
 const Op = db.Sequelize.Op;
-
+let {superAdminCompany} = require('../config/default.js');
 exports.registerCompany = async (req, res) => {
   // Save User to Database
   //   return res.status(200).send(req.body);
@@ -31,7 +31,7 @@ exports.registerCompany = async (req, res) => {
            });
 
    }catch(err) {
-       return res.status(500).send({ message: "Something wrrong" });
+       return res.status(500).send({ message: err.message });
    }
 
 };
@@ -53,7 +53,7 @@ exports.companyList = async (req, res) => {
             ],
             where: {
                 name: {
-                    [Op.not]: 'ABC'
+                    [Op.not]: superAdminCompany
                 }
             }
 
@@ -67,7 +67,7 @@ exports.companyList = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 };
@@ -85,7 +85,7 @@ exports.selectedCompanyStatusChange = async (req, res) => {
         });
 
         if(!company){
-            res.status(401).send({ message: err.message });
+            return res.status(401).send({ message: "No found company" });
         }
 
         Company.update(
@@ -127,7 +127,7 @@ exports.deleteSelectedCompany = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 };

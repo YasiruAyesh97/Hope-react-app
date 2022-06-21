@@ -7,7 +7,7 @@ const Users_Roles = db.users_roles;
 const Role = db.role;
 const Op = db.Sequelize.Op;
 const bcrypt = require("bcryptjs");
-
+let {roleRegularUser} = require('../config/default.js');
 
 
 exports.regularUserRegister = async (req, res) => {
@@ -17,7 +17,7 @@ exports.regularUserRegister = async (req, res) => {
 
         let regularuserrole =await Role.findOne({
             where: {
-                name:"user"
+                name: roleRegularUser
             }
         })
         let user =await User.findOne({
@@ -67,7 +67,7 @@ exports.regularUsersList = async (req, res) => {
 
         const role = await Role.findOne({
             where: {
-                name :'user'
+                name :roleRegularUser
             }
         })
 
@@ -150,7 +150,7 @@ exports.deleteSelectedRegularUser = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 };
@@ -179,7 +179,6 @@ exports.selectedRegularUserStatusChange = async (req, res) => {
         }).catch(err => {
             res.status(401).send({ message: err.message });
         });
-
 
 
 

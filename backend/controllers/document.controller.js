@@ -42,7 +42,7 @@ exports.insertDocument = async (req, res) => {
            });
 
    }catch(err) {
-       return res.status(500).send({ message: "Something wrong" });
+       return res.status(500).send({ message: err.message });
    }
 
 };
@@ -162,7 +162,7 @@ exports.deleteSelectedDocument = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: "Something wrong" });
+        return res.status(500).send({ message: err.message });
     }
 
 };
@@ -211,7 +211,7 @@ exports.ExpireSoonDocumentList = async (req, res) => {
 
 
     }catch(err) {
-        return res.status(500).send({ message: err });
+        return res.status(500).send({ message: err.message });
     }
 
 }

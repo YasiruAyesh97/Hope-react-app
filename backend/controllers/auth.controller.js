@@ -7,7 +7,7 @@ const User = db.user;
 const Role = db.role;
 const Users_Roles = db.users_roles;
 const Op = db.Sequelize.Op;
-
+let {roleAdmin,roleRegularUser,superAdminEmail} = require('../config/default.js');
 
 
 exports.signup = async (req, res) => {
@@ -16,12 +16,12 @@ exports.signup = async (req, res) => {
    try{
        let adminrole =await Role.findOne({
            where: {
-               name:"admin"
+               name:roleAdmin
            }
        })
        let regularuserrole =await Role.findOne({
            where: {
-               name:"user"
+               name:roleRegularUser
            }
        })
        let user =await User.findOne({
@@ -79,7 +79,7 @@ exports.signup = async (req, res) => {
            });
 
    }catch(err) {
-       return res.status(500).send({ message: "Something wrrong" });
+       return res.status(500).send({ message: err.message });
    }
 
 
@@ -107,7 +107,7 @@ exports.signin = (req, res) => {
           message: "Invalid password"
         });
       }
-      console.log("secret key :"+ config.secret)
+
 
       var authorities = [];
       user.getRoles().then(roles => {
@@ -127,50 +127,3 @@ exports.signin = (req, res) => {
     });
 };
 
-
-
-//
-// exports.signin = (req, res) => {
-//     User.findOne({
-//         where: {
-//             email: req.body.email
-//         }
-//     })
-//         .then(user => {
-//             if (!user) {
-//                 return res.status(404).send({ message: "No user found" });
-//             }else if(!user.active){
-//                 return res.status(404).send({ message: "User is not activate" });
-//             }
-//             var passwordIsValid = bcrypt.compareSync(
-//                 req.body.password,
-//                 user.password
-//             );
-//             if (!passwordIsValid) {
-//                 return res.status(401).send({
-//                     accessToken: null,
-//                     message: "Invalid password"
-//                 });
-//             }
-//             console.log("secret key :"+ config.secret)
-//             var token = jwt.sign({ id: user.id }, config.secret, {
-//                 expiresIn: 86400 // 24 hours
-//             });
-//             var authorities = [];
-//             user.getRoles().then(roles => {
-//                 for (let i = 0; i < roles.length; i++) {
-//                     authorities.push("ROLE_" + roles[i].name.toUpperCase());
-//                 }
-//                 res.status(200).send({
-//                     id: user.id,
-//                     username: user.username,
-//                     email: user.email,
-//                     roles: authorities,
-//                     accessToken: token
-//                 });
-//             });
-//         })
-//         .catch(err => {
-//             res.status(500).send({ message: err.message });
-//         });
-// };
