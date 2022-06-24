@@ -10,9 +10,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post( "/api/catalog3/insert",[authJwt.verifyToken,authJwt.isAdmin],controller.insertCatalog1);
-  app.get( "/api/catalog3/all/:companyId",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.Catalog1List);
-  app.put( "/api/catalog3/status/:id",[authJwt.verifyToken,authJwt.isAdmin],controller.selectedCatalog1StatusChange);
-  app.delete( "/api/catalog3/delete/:id",[authJwt.verifyToken,authJwt.isAdmin],controller.deleteSelectedCatalog);
+  app.post("/api/catalog3/insert",[authJwt.verifyToken,authJwt.isAdmin],controller.insertCatalog1);
+  app.get("/api/catalog3/all/:companyId",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.catalog1List);
+  app.get("/api/catalog3/active-all/:companyId",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.activeCatalog1List);
+  app.put("/api/catalog3/status/:id",[authJwt.verifyToken,authJwt.isAdmin],controller.selectedCatalog1StatusChange);
+  app.delete("/api/catalog3/delete/:id",[authJwt.verifyToken,authJwt.isAdmin],controller.deleteSelectedCatalog);
 
 };

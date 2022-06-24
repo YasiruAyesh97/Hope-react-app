@@ -56,9 +56,6 @@ exports.regularUserRegister = async (req, res) => {
         return res.status(500).send({ message: err.message });
     }
 
-
-
-
 };
 
 exports.regularUsersList = async (req, res) => {
@@ -157,10 +154,8 @@ exports.deleteSelectedRegularUser = async (req, res) => {
 
 
 exports.selectedRegularUserStatusChange = async (req, res) => {
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
-    try{
 
+    try{
 
         let user =await User.findOne({
 
@@ -179,7 +174,6 @@ exports.selectedRegularUserStatusChange = async (req, res) => {
         }).catch(err => {
             res.status(401).send({ message: err.message });
         });
-
 
 
     }catch(err) {

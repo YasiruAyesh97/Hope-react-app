@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { Formik } from "formik";
 import {useNavigate} from 'react-router-dom'
 
-import {registerAdminOrUser,companyListData} from "../../../service/web/userService";
+import {registerAdminOrUser,activeCompanyListData} from "../../../service/web/userService";
 
 const schema = yup.object().shape({
 
@@ -32,7 +32,7 @@ const AdminAdd =() =>{
     }, [])
 
     async function getCompanyList(){
-        const {data:companies} =await companyListData();
+        const {data:companies} =await activeCompanyListData();
         setCompanyList(companies)
     }
 

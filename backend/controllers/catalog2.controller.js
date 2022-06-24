@@ -5,8 +5,7 @@ const Catalog_2 = db.catalog_2;
 const Op = db.Sequelize.Op;
 
 exports.insertCatalog2 = async (req, res) => {
-  // Save User to Database
-  //   return res.status(200).send(req.body);
+
    try{
 
        let catalog =await Catalog_2.findOne({
@@ -38,13 +37,10 @@ exports.insertCatalog2 = async (req, res) => {
 
 };
 
-exports.Catalog2List = async (req, res) => {
-    //need the admin companyId id
-    //   return res.status(200).send(req.params.companyId);
+exports.catalog2List = async (req, res) => {
     try{
 
-
-        let company =await Catalog_2.findAll({
+        let catalog =await Catalog_2.findAll({
 
             attributes: [
                 'id',
@@ -61,8 +57,8 @@ exports.Catalog2List = async (req, res) => {
 
         });
 
-        if(company){
-            return res.status(200).send(company);
+        if(catalog){
+            return res.status(200).send(catalog);
         }
 
 
@@ -72,12 +68,39 @@ exports.Catalog2List = async (req, res) => {
 
 };
 
-
-exports.selectedCatalog1StatusChange = async (req, res) => {
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
+exports.activeCatalog2List = async (req, res) => {
     try{
 
+        let catalog =await Catalog_2.findAll({
+
+            attributes: [
+                'id',
+                'name',
+                [fn('DATE', col('createdAt')), 'date'],
+                ['active','status']
+
+            ],
+            where: {
+                companyId : req.params.companyId,
+                active : true
+            }
+
+        });
+
+        if(catalog){
+            return res.status(200).send(catalog);
+        }
+
+
+    }catch(err) {
+        return res.status(500).send({ message: err.message });
+    }
+
+};
+
+exports.selectedCatalog1StatusChange = async (req, res) => {
+
+    try{
 
         let ct1 =await Catalog_2.findOne({
 
@@ -91,14 +114,11 @@ exports.selectedCatalog1StatusChange = async (req, res) => {
         Catalog_2.update(
             { active: !ct1.active},
             { where: { id: req.params.id } }
-        ).then(company => {
+        ).then(data => {
             return res.status(200).send({ message: "successfully" });
          }).catch(err => {
                 res.status(401).send({ message: err.message });
          });
-
-
-
 
     }catch(err) {
         return res.status(500).send({message: err.message });
@@ -122,8 +142,6 @@ exports.deleteSelectedCatalog = async (req, res) => {
             return res.status(200).send({ message: "company deleted" });
 
         }
-
-
 
 
     }catch(err) {

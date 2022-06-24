@@ -11,10 +11,8 @@ let {roleAdmin,roleRegularUser,superAdminEmail} = require('../config/default.js'
 
 
 exports.usersList = async (req, res) => {
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
-    try{
 
+    try{
 
         let user =await User.findAll({
 
@@ -51,8 +49,7 @@ exports.usersList = async (req, res) => {
 };
 
 exports.selectedUser = async (req, res) => {
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
+
     try{
 
         let user =await User.findOne({
@@ -115,8 +112,6 @@ exports.selectedUser = async (req, res) => {
         }
 
 
-
-
     }catch(err) {
         return res.status(500).send({ message: "Something wrrong" });
     }
@@ -125,7 +120,6 @@ exports.selectedUser = async (req, res) => {
 
 
 exports.deleteSelectedUser = async (req, res) => {
-    // Save User to Database
 
     try{
 
@@ -149,7 +143,6 @@ exports.deleteSelectedUser = async (req, res) => {
 
         }
 
-
     }catch(err) {
         return res.status(500).send({ message: err.message });
     }
@@ -159,9 +152,6 @@ exports.deleteSelectedUser = async (req, res) => {
 
 exports.selectedUserEdit = async (req, res) => {
 
-
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
     try{
         let isAdmin = req.body.isAdmin;
         let isRUser = req.body.isRUser;
@@ -236,9 +226,6 @@ exports.selectedUserEdit = async (req, res) => {
         }).catch(err => {
             res.status(401).send({ message: err.message });
         });
-
-
-
 
     }catch(err) {
         return res.status(500).send({message: err.message });

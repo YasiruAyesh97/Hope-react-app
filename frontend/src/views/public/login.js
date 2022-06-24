@@ -143,8 +143,8 @@ const Login = () => {
                                                    placeholder=""
                                                    value={values.email}
                                                    onChange={handleChange("email")}
-                                                   isValid={touched.email && !errors.email}
-                                                   isInvalid={!!errors.email}
+                                                   isValid={!errors.email}
+                                                   isInvalid={errors.email}
                                                />
                                                <Form.Control.Feedback type="invalid">
                                                   {errors.email}
@@ -161,8 +161,8 @@ const Login = () => {
                                                    placeholder=""
                                                    value={values.password}
                                                    onChange={handleChange("password")}
-                                                   isValid={touched.password && !errors.password}
-                                                   isInvalid={!!errors.password}
+                                                   isValid={!errors.password}
+                                                   isInvalid={errors.password}
                                                />
                                                <Form.Control.Feedback type="invalid">
                                                   {errors.password}
@@ -190,9 +190,6 @@ const Login = () => {
                                       </form>
                                   )}
                                </Formik>
-
-
-
 
                             </Card.Body>
                          </Card>

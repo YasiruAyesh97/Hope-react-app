@@ -8,8 +8,7 @@ const Document = db.document;
 const Op = db.Sequelize.Op;
 
 exports.insertDocument = async (req, res) => {
-  // Save User to Database
-  //   return res.status(200).send(req.body);
+
    try{
 
        let document =await Document.findOne({
@@ -18,7 +17,7 @@ exports.insertDocument = async (req, res) => {
            }
        })
        if(document){
-           return res.status(400).send({ message: "catalog list already registered" });
+           return res.status(400).send({ message: "document already registered" });
        }
        Document.create({
            name: req.body.name,
@@ -47,11 +46,9 @@ exports.insertDocument = async (req, res) => {
 
 };
 
-exports.DocumentList = async (req, res) => {
-    //need the admin companyId id
-    //   return res.status(200).send(req.params.companyId);
-    try{
+exports.documentList = async (req, res) => {
 
+    try{
 
         let document =await Document.findAll({
 
@@ -60,13 +57,11 @@ exports.DocumentList = async (req, res) => {
                 'name',
                 'dueDate',
                 [fn('DATE', col('dueDate')), 'dueDate'],
-                // [db.Sequelize.literal('SUBSTRING(dueDate, 0, 10) '),'dueDate'],
                 'agentName',
                 [db.Sequelize.literal('catalog_1.name'), 'catalog1name'],
                 [db.Sequelize.literal('catalog_2.name'), 'catalog2name'],
                 [db.Sequelize.literal('catalog_3.name'), 'catalog3name'],
                 ['active','status'],
-                // [fn('DATE', col('createdAt')), 'date'],
 
             ],
             include: [
@@ -94,8 +89,6 @@ exports.DocumentList = async (req, res) => {
                 companyId : req.params.companyId
             }
 
-
-
         });
 
         if(document){
@@ -111,10 +104,8 @@ exports.DocumentList = async (req, res) => {
 
 
 exports.selectedDocumentStatusChange = async (req, res) => {
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
-    try{
 
+    try{
 
         let doc =await Document.findOne({
 
@@ -135,8 +126,6 @@ exports.selectedDocumentStatusChange = async (req, res) => {
          });
 
 
-
-
     }catch(err) {
         return res.status(500).send({message: err.message });
     }
@@ -144,7 +133,6 @@ exports.selectedDocumentStatusChange = async (req, res) => {
 };
 
 exports.deleteSelectedDocument = async (req, res) => {
-    // Save User to Database
 
     try{
 
@@ -159,17 +147,14 @@ exports.deleteSelectedDocument = async (req, res) => {
         }
 
 
-
-
     }catch(err) {
         return res.status(500).send({ message: err.message });
     }
 
 };
 
-exports.ExpireSoonDocumentList = async (req, res) => {
-    //need the admin companyId id
-    //   return res.status(200).send(req.params.companyId);
+exports.expireSoonDocumentList = async (req, res) => {
+
     try{
         let today = new Date();
         let next7days = new Date();
@@ -191,8 +176,6 @@ exports.ExpireSoonDocumentList = async (req, res) => {
                 }
             }
 
-
-
         });
 
 
@@ -208,7 +191,6 @@ exports.ExpireSoonDocumentList = async (req, res) => {
             }
             return res.status(200).send(newArr);
         }
-
 
     }catch(err) {
         return res.status(500).send({ message: err.message });

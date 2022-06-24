@@ -3,9 +3,9 @@ const db = require("../models");
 const Company = db.company;
 const Op = db.Sequelize.Op;
 let {superAdminCompany} = require('../config/default.js');
+
 exports.registerCompany = async (req, res) => {
-  // Save User to Database
-  //   return res.status(200).send(req.body);
+
    try{
 
        let company =await Company.findOne({
@@ -37,10 +37,8 @@ exports.registerCompany = async (req, res) => {
 };
 
 exports.companyList = async (req, res) => {
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
-    try{
 
+    try{
 
         let company =await Company.findAll({
 
@@ -57,7 +55,38 @@ exports.companyList = async (req, res) => {
                 }
             }
 
+        });
 
+        if(company){
+            return res.status(200).send(company);
+        }
+
+
+    }catch(err) {
+        return res.status(500).send({ message: err.message });
+    }
+
+};
+
+exports.activeCompanyList = async (req, res) => {
+
+    try{
+
+        let company =await Company.findAll({
+
+            attributes: [
+                'id',
+                'name',
+                [fn('DATE', col('createdAt')), 'date'],
+                ['active','status']
+
+            ],
+            where: {
+                name: {
+                    [Op.not]: superAdminCompany
+                },
+                active:true
+            }
 
         });
 
@@ -74,10 +103,8 @@ exports.companyList = async (req, res) => {
 
 
 exports.selectedCompanyStatusChange = async (req, res) => {
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
-    try{
 
+    try{
 
         let company =await Company.findOne({
 
@@ -98,8 +125,6 @@ exports.selectedCompanyStatusChange = async (req, res) => {
          });
 
 
-
-
     }catch(err) {
         return res.status(500).send({message: err.message });
     }
@@ -107,7 +132,6 @@ exports.selectedCompanyStatusChange = async (req, res) => {
 };
 
 exports.deleteSelectedCompany = async (req, res) => {
-    // Save User to Database
 
     try{
 
@@ -122,8 +146,6 @@ exports.deleteSelectedCompany = async (req, res) => {
             return res.status(200).send({ message: "company deleted" });
 
         }
-
-
 
 
     }catch(err) {

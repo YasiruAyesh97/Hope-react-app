@@ -1,12 +1,10 @@
 const {fn,col} = require('sequelize');
 const db = require("../models");
-const Company = db.company;
 const Catalog_1 = db.catalog_1;
 const Op = db.Sequelize.Op;
 
 exports.insertCatalog1 = async (req, res) => {
-  // Save User to Database
-  //   return res.status(200).send(req.body);
+
    try{
 
        let catalog =await Catalog_1.findOne({
@@ -38,11 +36,9 @@ exports.insertCatalog1 = async (req, res) => {
 
 };
 
-exports.Catalog1List = async (req, res) => {
-    //need the admin companyId id
-    //   return res.status(200).send(req.params.companyId);
-    try{
+exports.catalog1List = async (req, res) => {
 
+    try{
 
         let company =await Catalog_1.findAll({
 
@@ -57,6 +53,35 @@ exports.Catalog1List = async (req, res) => {
                 companyId : req.params.companyId
             }
 
+        });
+
+        if(company){
+            return res.status(200).send(company);
+        }
+
+    }catch(err) {
+        return res.status(500).send({ message: err.message });
+    }
+
+};
+
+exports.activeCatalog1List = async (req, res) => {
+
+    try{
+
+        let company =await Catalog_1.findAll({
+
+            attributes: [
+                'id',
+                'name',
+                [fn('DATE', col('createdAt')), 'date'],
+                ['active','status']
+
+            ],
+            where: {
+                companyId : req.params.companyId,
+                active : true
+            }
 
 
         });
@@ -74,10 +99,8 @@ exports.Catalog1List = async (req, res) => {
 
 
 exports.selectedCatalog1StatusChange = async (req, res) => {
-    // Save User to Database
-    //   return res.status(200).send(req.body.email);
-    try{
 
+    try{
 
         let ct1 =await Catalog_1.findOne({
 
@@ -98,8 +121,6 @@ exports.selectedCatalog1StatusChange = async (req, res) => {
          });
 
 
-
-
     }catch(err) {
         return res.status(500).send({message: err.message });
     }
@@ -107,7 +128,6 @@ exports.selectedCatalog1StatusChange = async (req, res) => {
 };
 
 exports.deleteSelectedCatalog = async (req, res) => {
-    // Save User to Database
 
     try{
 
@@ -122,9 +142,6 @@ exports.deleteSelectedCatalog = async (req, res) => {
             return res.status(200).send({ message: "company deleted" });
 
         }
-
-
-
 
     }catch(err) {
         return res.status(500).send({ message: err.message });

@@ -11,8 +11,8 @@ module.exports = function(app) {
   });
 
   app.post( "/api/document/insert",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.insertDocument);
-  app.get( "/api/document/all/:companyId",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.DocumentList);
-  app.get( "/api/document/expiresoon/:companyId",controller.ExpireSoonDocumentList);
+  app.get( "/api/document/all/:companyId",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.documentList);
+  app.get( "/api/document/expiresoon/:companyId",controller.expireSoonDocumentList);
   app.put( "/api/document/status/:id",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.selectedDocumentStatusChange);
   app.delete( "/api/document/delete/:id",[authJwt.verifyToken,authJwt.isAdminOrUser],controller.deleteSelectedDocument);
 

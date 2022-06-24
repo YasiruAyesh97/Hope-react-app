@@ -7,12 +7,10 @@ const User = db.user;
 const Role = db.role;
 const Users_Roles = db.users_roles;
 const Op = db.Sequelize.Op;
-let {roleAdmin,roleRegularUser,superAdminEmail} = require('../config/default.js');
-
+let {roleAdmin,roleRegularUser} = require('../config/default.js');
 
 exports.signup = async (req, res) => {
-  // Save User to Database
-  //   return res.status(200).send(req.body.email);
+
    try{
        let adminrole =await Role.findOne({
            where: {
@@ -81,9 +79,6 @@ exports.signup = async (req, res) => {
    }catch(err) {
        return res.status(500).send({ message: err.message });
    }
-
-
-
 
 };
 exports.signin = (req, res) => {

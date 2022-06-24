@@ -45,6 +45,13 @@ export function companyListData(){
         }});
 }
 
+export function activeCompanyListData(){
+    return  axios.get(`${config["BASEURL"]}`+'/'+'api/company/active-all',{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
+}
+
 export function adminRegularUserData(){
     return  axios.get(`${config["BASEURL"]}`+'/'+'api/super-admin/user-list',{
         headers: {
@@ -130,6 +137,13 @@ export function catalog1DataFetch(companyId){
         }});
 }
 
+export function activeCatalog1DataFetch(companyId){
+    return  axios.get(`${config["BASEURL"]}`+'/'+'api/catalog1/active-all'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
+}
+
 export function selectedCatalog1StatusUpdate(id){
     return  axios.put(`${config["BASEURL"]}`+'/'+'api/catalog1/status'+'/'+id,{},{
         headers: {
@@ -150,6 +164,13 @@ export function catalog2DataFetch(companyId){
         }});
 }
 
+export function activeCatalog2DataFetch(companyId){
+    return  axios.get(`${config["BASEURL"]}`+'/'+'api/catalog2/active-all'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
+}
+
 export function selectedCatalog2StatusUpdate(id){
     return  axios.put(`${config["BASEURL"]}`+'/'+'api/catalog2/status'+'/'+id,{},{
         headers: {
@@ -165,6 +186,13 @@ export function selectedCatalog2Delete(id){
 //catalog 3
 export function catalog3DataFetch(companyId){
     return  axios.get(`${config["BASEURL"]}`+'/'+'api/catalog3/all'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
+}
+
+export function activeCatalog3DataFetch(companyId){
+    return  axios.get(`${config["BASEURL"]}`+'/'+'api/catalog3/active-all'+'/'+companyId,{
         headers: {
             'x-access-token': sessionStorage.getItem('userToken')
         }});

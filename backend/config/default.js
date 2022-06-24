@@ -8,37 +8,5 @@ const defaultValue = {
   superAdminPassword:"AaBa123#",
 
 };
-
 module.exports = defaultValue;
 
-
-
-//
-// module.exports = {
-//
-// };module.exports = {
-//
-// };
-// module.exports = {
-//
-// };
-// module.exports = {
-//
-// };
-//
-// module.exports = {
-//
-// };
-// module.exports = {
-//
-// };
-// module.exports = {
-//
-// };
-//
-//
-//
-//
-//
-//
-//
