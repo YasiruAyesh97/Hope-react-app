@@ -132,7 +132,7 @@ const Header = (props) => {
 
                                             {expiredDocumentList === undefined || expiredDocumentList.length == 0?
                                                 <div className="d-flex justify-content-between align-items-center">
-                                                    <p className="m-1">nothing found</p>
+                                                    <p className="m-1">No documents abut expire</p>
                                                 </div>
 
                                                 :
