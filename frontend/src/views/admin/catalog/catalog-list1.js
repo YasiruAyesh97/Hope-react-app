@@ -44,7 +44,7 @@ const UserList =() =>{
          }
 
       }catch (err) {
-         console.log("error in delete record"+err)
+
       }
    };
 
@@ -59,7 +59,7 @@ const UserList =() =>{
             setCatalog1List(newArr)
          }
       }catch (err) {
-         console.log("error in delete record"+err)
+
       }
 
    }

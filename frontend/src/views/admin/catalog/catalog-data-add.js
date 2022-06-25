@@ -10,7 +10,7 @@ import useAuth from "../../../hooks/useAuth";
 
 const schema = yup.object().shape({
    name: yup.string().required(),
-   listType: yup.string().required("catalog is required"),
+   listType: yup.string().required("catalog is required").label("list type"),
 
 
 });
@@ -110,6 +110,8 @@ const AdminAdd =() =>{
                                     handleReset,
                                     handleChange,
                                     values,
+                                    dirty,
+                                    isValid,
                                     touched,
                                     errors }) => (
 
@@ -123,7 +125,7 @@ const AdminAdd =() =>{
                                                 data-style="py-0"
                                                 value={values.listType}
                                                 onChange={handleChange("listType")}
-                                                isValid={touched.listType && !errors.listType}
+                                                isValid={!errors.listType}
                                                 isInvalid={errors.listType}
                                             >
                                                <option value="">select</option>
@@ -146,7 +148,7 @@ const AdminAdd =() =>{
                                                 placeholder=" "
                                                 value={values.name}
                                                 onChange={handleChange("name")}
-                                                isValid={touched.name && !errors.name}
+                                                isValid={!errors.name}
                                                 isInvalid={errors.name}
                                             />
                                             <Form.Control.Feedback type="invalid">
@@ -157,7 +159,11 @@ const AdminAdd =() =>{
 
 
                                       </div>
-                                      <Button type="submit" variant="btn btn-primary">Submit</Button>{' '}
+                                      <Button
+                                          type="submit"
+                                          variant="btn btn-primary"
+                                          disabled={!(dirty && isValid)}
+                                      >Submit</Button>{' '}
                                       <Button type="reset" variant="secondary" onClick={handleReset}> Reset </Button>
 
                                    </form>

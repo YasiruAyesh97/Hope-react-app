@@ -35,7 +35,7 @@ const UserList =() =>{
          const {data:user} =await RegularUserDataFetch(auth.companyId);
          setRegularUserList(user)
       }catch (err) {
-         console.log("error in fetching users record"+err)
+
       }
    }
 
@@ -72,13 +72,6 @@ const UserList =() =>{
       setShow(true)
 
    };
-   const handleSubmit=values=>{
-      // console.log(values)
-      // let newArr = [...catalogList];
-      // const result = newArr.filter(item => item.id != selectRow.id);
-      // setCatalogList(result)
-      handleCloseEdit()
-   }
 
    //delete model
    const [show1, setShow1] = useState(false);
@@ -103,17 +96,16 @@ const UserList =() =>{
          }
 
       }catch (err) {
-         console.log("error in delete record"+err)
+
       }
    };
 
 
    //handle toggle
    const  handleToggle=async (item,idx)=>{
-      console.log("handleToggle called: ")
+
       try{
          const response = await selectedRegularUserStatusUpdate(item.id)
-         console.log("response : "+JSON.stringify(response))
          if(response){
             let newArr = [...regularUserList];
             newArr[idx]['status']= newArr[idx]['status']?0:1
@@ -121,7 +113,7 @@ const UserList =() =>{
             setRegularUserList(newArr)
          }
       }catch (err) {
-         console.log("error in toggle record"+err)
+
       }
 
    }

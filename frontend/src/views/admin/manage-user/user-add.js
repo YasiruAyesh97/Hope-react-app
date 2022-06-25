@@ -115,6 +115,8 @@ const AdminAdd =() =>{
                                               handleReset,
                                               handleChange,
                                               values,
+                                              dirty,
+                                              isValid,
                                               touched,
                                               errors }) => (
 
@@ -176,7 +178,11 @@ const AdminAdd =() =>{
                                                     </Form.Group>
 
                                                 </div>
-                                                <Button type="submit" variant="btn btn-primary">Submit</Button>{' '}
+                                                <Button
+                                                    type="submit"
+                                                    variant="btn btn-primary"
+                                                    disabled={!(dirty && isValid)}
+                                                >Submit</Button>{' '}
                                                 <Button type="reset" variant="secondary" onClick={handleReset}> Reset </Button>
 
                                             </form>

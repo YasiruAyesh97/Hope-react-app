@@ -17,8 +17,7 @@ const UserList =() =>{
    async function getUserDataList(){
       const {data:company} =await companyListData();
       setCompanyList(company)
-      console.log("users :")
-      console.log(company)
+
    }
 
    //handle delete
@@ -45,7 +44,7 @@ const UserList =() =>{
          }
 
       }catch (err) {
-         console.log("error in delete record"+err)
+
       }
    };
 

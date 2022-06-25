@@ -30,8 +30,7 @@ const Login = () => {
    const { setAuth } = useAuth();
 
    const navigate = useNavigate();
-   const location = useLocation();
-   // const from = location.state?.from?.pathname || "/";
+
    const from =  "/";
 
    // const userRef = useRef();
@@ -130,6 +129,8 @@ const Login = () => {
                                        handleChange,
                                        values,
                                        touched,
+                                       dirty,
+                                       isValid,
                                        errors }) => (
 
                                       <form noValidate onSubmit={handleSubmit}>
@@ -184,7 +185,12 @@ const Login = () => {
                                          </Col>
                                       </Row>
                                      <div className="d-flex justify-content-center">
-                                     <Button  onClick={handleSubmit} type="button" variant="btn btn-primary">Sign In</Button>
+                                     <Button
+                                         onClick={handleSubmit}
+                                         type="button"
+                                         variant="btn btn-primary"
+                                         disabled={!(dirty && isValid)}
+                                     >Sign In</Button>
                                      </div>
 
                                       </form>

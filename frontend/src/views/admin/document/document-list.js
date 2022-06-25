@@ -32,7 +32,7 @@ const UserList =() =>{
 
    //delete record
    const  deleteRecord= async () =>{
-      console.log("delete called :"+selectRow.id)
+
       try{
          const response =await selectedDocumentDelete(selectRow.id)
          if(response){
@@ -43,7 +43,7 @@ const UserList =() =>{
          }
 
       }catch (err) {
-         console.log("error in delete record"+err)
+
       }
    };
 
@@ -59,7 +59,7 @@ const UserList =() =>{
             setDocumentList(newArr)
          }
       }catch (err) {
-         console.log("error in delete record"+err)
+
       }
 
    }

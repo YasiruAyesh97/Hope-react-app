@@ -77,11 +77,9 @@ const UserList = () =>{
    //edit form
    const handleSubmit= async (values)=>{
       try {
-         console.log('selected item : '+JSON.stringify(selectRow));
          const response = await selectedRegularUserOrAdminUpdate(selectRow.id,values.username, values.email, values.password, values.status, values.isAdmin, values.isRUser);
 
          if(response){
-            console.log(response)
             setErrCode(200);
             setErrMsg('Add new record successful');
          }
@@ -133,7 +131,7 @@ const UserList = () =>{
         }
 
      }catch (err) {
-      console.log("error in delete record"+err)
+
      }
    };
 

@@ -14,12 +14,12 @@ import {
 import useAuth from "../../../hooks/useAuth";
 
 const schema = yup.object().shape({
-    name: yup.string().required(),
-    dueDate: yup.string().required(),
-    agentName: yup.string().required(),
-    catalog1Id: yup.string().required(),
-    catalog2Id: yup.string().required(),
-    catalog3Id: yup.string().required(),
+    name: yup.string().required().label("name"),
+    dueDate: yup.string().required().label("due date"),
+    agentName: yup.string().required().label("agent name"),
+    catalog1Id: yup.string().required().label("catalog 1"),
+    catalog2Id: yup.string().required().label("catalog 2"),
+    catalog3Id: yup.string().required().label("catalog 3"),
 });
 const AdminAdd =() =>{
     const navigate = useNavigate();
@@ -144,7 +144,9 @@ const AdminAdd =() =>{
                                               handleChange,
 
                                               setFieldValue,
-
+                                              dirty,
+                                              isValid,
+                                              isInvalid,
                                               values,
                                               touched,
                                               errors }) => (
@@ -160,7 +162,7 @@ const AdminAdd =() =>{
                                                             placeholder=" "
                                                             value={values.name}
                                                             onChange={handleChange("name")}
-                                                            isValid={touched.name && !errors.name}
+                                                            isValid={!errors.name}
                                                             isInvalid={errors.name}
 
                                                         />
@@ -177,7 +179,7 @@ const AdminAdd =() =>{
                                                             data-style="py-0"
                                                             value={values.catalog1Id}
                                                             onChange={handleChange("catalog1Id")}
-                                                            isValid={touched.catalog1Id && !errors.catalog1Id}
+                                                            isValid={!errors.catalog1Id}
                                                             isInvalid={errors.catalog1Id}
                                                         >
                                                             <option value="">select</option>
@@ -198,7 +200,7 @@ const AdminAdd =() =>{
                                                             data-style="py-0"
                                                             value={values.catalog2Id}
                                                             onChange={handleChange("catalog2Id")}
-                                                            isValid={touched.catalog2Id && !errors.catalog2Id}
+                                                            isValid={!errors.catalog2Id}
                                                             isInvalid={errors.catalog2Id}
                                                         >
                                                             <option value="">select</option>
@@ -219,7 +221,7 @@ const AdminAdd =() =>{
                                                             data-style="py-0"
                                                             value={values.catalog3Id}
                                                             onChange={handleChange("catalog3Id")}
-                                                            isValid={touched.catalog3Id && !errors.catalog3Id}
+                                                            isValid={!errors.catalog3Id}
                                                             isInvalid={errors.catalog3Id}
                                                         >
                                                             <option value="">select</option>
@@ -241,7 +243,7 @@ const AdminAdd =() =>{
                                                             placeholder=" "
                                                             value={values.agentName}
                                                             onChange={handleChange("agentName")}
-                                                            isValid={touched.agentName && !errors.agentName}
+                                                            isValid={!errors.agentName}
                                                             isInvalid={errors.agentName}
                                                         />
                                                         <Form.Control.Feedback type="invalid">
@@ -259,7 +261,7 @@ const AdminAdd =() =>{
                                                             placeholder="Due Date"
                                                             value={values.dueDate}
                                                             onChange={handleChange("dueDate")}
-                                                            isValid={touched.dueDate && !errors.dueDate}
+                                                            isValid={!errors.dueDate}
                                                             isInvalid={errors.dueDate}
                                                         />
                                                         <Form.Control.Feedback type="invalid">
@@ -270,7 +272,11 @@ const AdminAdd =() =>{
 
 
                                                 </div>
-                                                <Button type="submit" variant="btn btn-primary">Submit</Button>{' '}
+                                                <Button
+                                                    type="submit"
+                                                    variant="btn btn-primary"
+                                                    disabled={!(dirty && isValid)}
+                                                >Submit</Button>{' '}
                                                 <Button type="reset" variant="secondary" onClick={handleReset}> Reset </Button>
 
                                             </form>

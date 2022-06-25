@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Form, Button, FormCheck, Alert, Modal} from 'react-bootstrap'
+import {Row, Col, Form, Button, FormCheck, Alert} from 'react-bootstrap'
 import Card from '../../../components/Card'
 import * as yup from "yup";
 import { Formik } from "formik";
@@ -140,7 +140,8 @@ const AdminAdd =() =>{
                                      handleChange,
 
                                      setFieldValue,
-
+                                     dirty,
+                                     isValid,
                                      values,
                                      touched,
                                      errors }) => (
@@ -289,7 +290,11 @@ const AdminAdd =() =>{
                                           </Form.Group>
 
                                       </div>
-                                      <Button type="submit" variant="btn btn-primary">Submit</Button>{' '}
+                                      <Button
+                                          type="submit"
+                                          variant="btn btn-primary"
+                                          disabled={!(dirty && isValid)}
+                                      >Submit</Button>{' '}
                                       <Button type="reset" variant="secondary" onClick={handleReset}> Reset </Button>
 
                                    </form>

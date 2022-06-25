@@ -48,6 +48,7 @@ const Header = (props) => {
     const { auth,setAuth } = useAuth();
     const username = auth.username
     const email = auth.email
+    const roles = auth.roles
 
     useEffect(() => {
          // navbarstylemode
@@ -132,7 +133,7 @@ const Header = (props) => {
 
                                             {expiredDocumentList === undefined || expiredDocumentList.length == 0?
                                                 <div className="d-flex justify-content-between align-items-center">
-                                                    <p className="m-1">No documents abut expire</p>
+                                                    {roles.includes("ROLE_SUPERADMIN")? <p className="m-1">Nothing to show</p>: <p className="m-1">No documents abut expire</p>}
                                                 </div>
 
                                                 :
