@@ -5,6 +5,7 @@ const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
+const Company = db.company;
 const Users_Roles = db.users_roles;
 const Op = db.Sequelize.Op;
 let {roleAdmin,roleRegularUser} = require('../config/default.js');
@@ -12,6 +13,9 @@ let {roleAdmin,roleRegularUser} = require('../config/default.js');
 exports.signup = async (req, res) => {
 
    try{
+       let isAdmin=req.body.checkadmin;
+       let isUser=req.body.checkuser;
+
        let adminrole =await Role.findOne({
            where: {
                name:roleAdmin
@@ -28,6 +32,7 @@ exports.signup = async (req, res) => {
            }
        })
        if(user){
+
            return res.status(400).send({ message: "user already registered" });
        }
        User.create({
@@ -39,7 +44,7 @@ exports.signup = async (req, res) => {
        })
            .then(user => {
                let success =false;
-               if(req.body.checkadmin ||req.body.checkadmin=='true'){
+               if(isAdmin ||isAdmin=='true'){
                    Users_Roles.create({
                        roleId: adminrole.id,
                        userId: user.id,
@@ -50,11 +55,10 @@ exports.signup = async (req, res) => {
                        }
                    })
                        .catch(err => {
-                           console.log("Users_Roles admin error")
                            return res.status(500).send({ message: err.message });
                        });
                }
-               if(req.body.checkuser||req.body.checkuser=='true'){
+               if(isUser|| isUser=='true'){
                    Users_Roles.create({
                        roleId: regularuserrole.id,
                        userId: user.id,
@@ -91,8 +95,22 @@ exports.signin = (req, res) => {
       if (!user) {
           return res.status(400).send({ message: "No user found" });
       }else if(!user.active){
-          return res.status(400).send({ message: "User is not activate" });
+          return res.status(400).send({ message: "Your account is inactive contact your admin" });
       }
+
+      Company.findOne({
+          where: {
+              id:user.companyId
+          }
+      }).then(company=>{
+          if(!company.active){
+              return res.status(400).send({ message: "Your company is inactive" });
+          }
+      }).catch(err => {
+          res.status(500).send({ message: err.message });
+      });
+
+
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password

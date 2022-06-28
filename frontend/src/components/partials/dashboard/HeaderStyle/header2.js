@@ -122,6 +122,7 @@ const Header = (props) => {
                                     <span className="bg-danger dots"></span>
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu className="p-0 sub-drop dropdown-menu-end" aria-labelledby="notification-drop">
+
                                     <div className="m-0 shadow-none card">
                                         <div className="py-3 card-header d-flex justify-content-between bg-primary">
                                             <div className="header-title">
@@ -156,6 +157,24 @@ const Header = (props) => {
                                     </div>
                                 </Dropdown.Menu>
                             </Dropdown>
+
+                            {expiredDocumentList.length?
+                                <span style={{
+                                    backgroundColor: "#fa3e3e",
+                                    borderRadius: "50px",
+                                    color: "white",
+                                    padding: "0.5px 0.5px",
+                                    justifyContent:"center",
+                                    fontSize: "x-small",
+                                    position: "absolute",
+                                    top:"8px",
+                                }}>{expiredDocumentList.length<10? "0"+expiredDocumentList.length:expiredDocumentList.length}</span>
+                                :
+                                null
+                            }
+
+
+
                             <Dropdown as="li" className="nav-item">
                                 <Dropdown.Toggle as={CustomToggle} variant=" nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src={avatars1} alt="User-Profile" className="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded"/>

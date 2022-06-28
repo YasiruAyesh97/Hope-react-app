@@ -33,6 +33,9 @@ const AdminAdd =() =>{
 
    const handleSubmit = async (values,{resetForm}) => {
       try {
+         setShowSuccess(false)
+         setShowWarning(false)
+         setShowDanger(false)
 
          const response = await catalogRecordRegister(values.listType,values.name,auth.companyId);
 
@@ -81,10 +84,10 @@ const AdminAdd =() =>{
                                <Alert variant="success alert-left alert-dismissible fade show mb-3" role="alert" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible>
                                   <span>{errMsg}</span>
                                </Alert>
-                               <Alert variant="warning right alert-dismissible fade show mb-3" role="alert" show={showWarning} onClose={() => setShowWarning(false)} dismissible>
+                               <Alert variant="warning alert-left alert-dismissible fade show mb-3" role="alert" show={showWarning} onClose={() => setShowWarning(false)} dismissible>
                                   <span>{errMsg}</span>
                                </Alert>
-                               <Alert variant="danger bottom alert-dismissible fade show" role="alert" show={showDanger} onClose={() => setShowDanger(false)} dismissible>
+                               <Alert variant="danger alert-left alert-dismissible fade show mb-3" role="alert" show={showDanger} onClose={() => setShowDanger(false)} dismissible>
                                   <span>{errMsg}</span>
                                </Alert>
                             </Col>
@@ -125,7 +128,7 @@ const AdminAdd =() =>{
                                                 data-style="py-0"
                                                 value={values.listType}
                                                 onChange={handleChange("listType")}
-                                                isValid={!errors.listType}
+                                                isValid={touched.listType && !errors.listType}
                                                 isInvalid={errors.listType}
                                             >
                                                <option value="">select</option>
@@ -148,7 +151,7 @@ const AdminAdd =() =>{
                                                 placeholder=" "
                                                 value={values.name}
                                                 onChange={handleChange("name")}
-                                                isValid={!errors.name}
+                                                isValid={touched.name && !errors.name}
                                                 isInvalid={errors.name}
                                             />
                                             <Form.Control.Feedback type="invalid">

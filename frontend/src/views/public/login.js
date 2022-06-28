@@ -33,12 +33,12 @@ const Login = () => {
 
    const from =  "/";
 
-   // const userRef = useRef();
-   // const errRef = useRef();
-
    const [errMsg, setErrMsg] = useState('');
    const [errCode, setErrCode] = useState(0);
-
+   //alert 200 404 500
+   const [showSuccess ,setShowSuccess]= useState(false);
+   const [showWarning,setShowWarning]= useState(false);
+   const [showDanger,setShowDanger]= useState(false);
    useEffect(() => {
       setErrMsg('');
       setErrCode(0);
@@ -46,12 +46,16 @@ const Login = () => {
 
    const handleSubmit = async (values) => {
       try {
+         setShowSuccess(false)
+         setShowWarning(false)
+         setShowDanger(false)
 
          const response = await login(values.email,values.password);
 
          if(response){
             setAuth(response)
             navigate(from, { replace: true });
+            setShowSuccess(true)
          }
 
 
@@ -59,12 +63,15 @@ const Login = () => {
          if (!err?.response) {
             setErrMsg('No Server Response');
             setErrCode(500);
+            setShowDanger(true)
          } else if (err.response?.status === 400) {
-            setErrMsg('Missing Username or Password');
+            setErrMsg(err.response.data.message);
             setErrCode(400);
+            setShowWarning(true)
          } else if (err.response?.status === 401) {
             setErrMsg('Invalid password');
             setErrCode(401);
+            setShowWarning(true)
          } else {
             setErrMsg('Login Failed');
          }
@@ -93,24 +100,15 @@ const Login = () => {
                                <h2 className="mb-2 text-center">Sign In</h2>
                                <p className="text-center">Login to stay connected.</p>
 
-
-                               {errCode===500?<Alert variant="danger d-flex align-items-center" role="alert">
-                                  <svg className="me-2" id="exclamation-triangle-fill" fill="currentColor" width="20" viewBox="0 0 16 16">
-                                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
-                                  </svg>
-                                  <div>
-                                     {errMsg}
-                                  </div>
-                               </Alert>:null}
-
-                               {errCode===400||errCode===401? <Alert variant="warning d-flex align-items-center" role="alert">
-                                  <svg className="me-2" id="exclamation-triangle-fill" fill="currentColor" width="20" viewBox="0 0 16 16">
-                                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
-                                  </svg>
-                                  <div>
-                                     {errMsg}
-                                  </div>
-                               </Alert>:null}
+                               <Alert variant="success alert-left alert-dismissible fade show mb-3" role="alert" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible>
+                                  <span>{errMsg}</span>
+                               </Alert>
+                               <Alert variant="warning alert-left alert-dismissible fade show mb-3" role="alert" show={showWarning} onClose={() => setShowWarning(false)} dismissible>
+                                  <span>{errMsg}</span>
+                               </Alert>
+                               <Alert variant="danger alert-left alert-dismissible fade show mb-3" role="alert" show={showDanger} onClose={() => setShowDanger(false)} dismissible>
+                                  <span>{errMsg}</span>
+                               </Alert>
 
 
                                <Formik
@@ -144,13 +142,12 @@ const Login = () => {
                                                    placeholder=""
                                                    value={values.email}
                                                    onChange={handleChange("email")}
-                                                   isValid={!errors.email}
+                                                   isValid={touched.email && !errors.email}
                                                    isInvalid={errors.email}
                                                />
-                                               <Form.Control.Feedback type="invalid">
-                                                  {errors.email}
-                                               </Form.Control.Feedback>
-
+                                                   <Form.Control.Feedback type="invalid">
+                                                      {errors.email}
+                                                   </Form.Control.Feedback>
                                             </Form.Group>
 
                                             <Form.Group className="form-group">
@@ -162,7 +159,7 @@ const Login = () => {
                                                    placeholder=""
                                                    value={values.password}
                                                    onChange={handleChange("password")}
-                                                   isValid={!errors.password}
+                                                   isValid={touched.password && !errors.password}
                                                    isInvalid={errors.password}
                                                />
                                                <Form.Control.Feedback type="invalid">

@@ -59,6 +59,9 @@ const AdminAdd =() =>{
     //document add
     const handleSubmit = async (values,{resetForm}) => {
         try {
+            setShowSuccess(false)
+            setShowWarning(false)
+            setShowDanger(false)
 
             const response = await documentRecordInsert(values.name,values.dueDate,values.agentName,values.catalog1Id,values.catalog2Id,values.catalog3Id,auth.companyId,auth.id);
 
@@ -109,10 +112,10 @@ const AdminAdd =() =>{
                                         <Alert variant="success alert-left alert-dismissible fade show mb-3" role="alert" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible>
                                             <span>{errMsg}</span>
                                         </Alert>
-                                        <Alert variant="warning right alert-dismissible fade show mb-3" role="alert" show={showWarning} onClose={() => setShowWarning(false)} dismissible>
+                                        <Alert variant="warning alert-left alert-dismissible fade show mb-3" role="alert" show={showWarning} onClose={() => setShowWarning(false)} dismissible>
                                             <span>{errMsg}</span>
                                         </Alert>
-                                        <Alert variant="danger bottom alert-dismissible fade show" role="alert" show={showDanger} onClose={() => setShowDanger(false)} dismissible>
+                                        <Alert variant="danger alert-left alert-dismissible fade show mb-3" role="alert" show={showDanger} onClose={() => setShowDanger(false)} dismissible>
                                             <span>{errMsg}</span>
                                         </Alert>
                                     </Col>
@@ -162,7 +165,7 @@ const AdminAdd =() =>{
                                                             placeholder=" "
                                                             value={values.name}
                                                             onChange={handleChange("name")}
-                                                            isValid={!errors.name}
+                                                            isValid={touched.name && !errors.name}
                                                             isInvalid={errors.name}
 
                                                         />
@@ -179,7 +182,7 @@ const AdminAdd =() =>{
                                                             data-style="py-0"
                                                             value={values.catalog1Id}
                                                             onChange={handleChange("catalog1Id")}
-                                                            isValid={!errors.catalog1Id}
+                                                            isValid={touched.catalog1Id && !errors.catalog1Id}
                                                             isInvalid={errors.catalog1Id}
                                                         >
                                                             <option value="">select</option>
@@ -200,7 +203,7 @@ const AdminAdd =() =>{
                                                             data-style="py-0"
                                                             value={values.catalog2Id}
                                                             onChange={handleChange("catalog2Id")}
-                                                            isValid={!errors.catalog2Id}
+                                                            isValid={touched.catalog2Id && !errors.catalog2Id}
                                                             isInvalid={errors.catalog2Id}
                                                         >
                                                             <option value="">select</option>
@@ -221,7 +224,7 @@ const AdminAdd =() =>{
                                                             data-style="py-0"
                                                             value={values.catalog3Id}
                                                             onChange={handleChange("catalog3Id")}
-                                                            isValid={!errors.catalog3Id}
+                                                            isValid={touched.catalog3Id && !errors.catalog3Id}
                                                             isInvalid={errors.catalog3Id}
                                                         >
                                                             <option value="">select</option>
@@ -243,7 +246,7 @@ const AdminAdd =() =>{
                                                             placeholder=" "
                                                             value={values.agentName}
                                                             onChange={handleChange("agentName")}
-                                                            isValid={!errors.agentName}
+                                                            isValid={touched.agentName && !errors.agentName}
                                                             isInvalid={errors.agentName}
                                                         />
                                                         <Form.Control.Feedback type="invalid">
@@ -261,7 +264,7 @@ const AdminAdd =() =>{
                                                             placeholder="Due Date"
                                                             value={values.dueDate}
                                                             onChange={handleChange("dueDate")}
-                                                            isValid={!errors.dueDate}
+                                                            isValid={touched.dueDate && !errors.dueDate}
                                                             isInvalid={errors.dueDate}
                                                         />
                                                         <Form.Control.Feedback type="invalid">

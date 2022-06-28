@@ -219,7 +219,8 @@ const UserList = () =>{
                                    handleSubmit,
                                    handleReset,
                                    handleChange,
-
+                                   dirty ,
+                                   isValid,
                                    setFieldValue,
 
                                    values,
@@ -362,7 +363,11 @@ const UserList = () =>{
                                      </div>
 
 
-                                     <Button type="submit" variant="primary">
+                                     <Button
+                                         type="submit"
+                                         variant="primary"
+                                         disabled={!(dirty && isValid)}
+                                     >
                                         Save
                                      </Button>{' '}
                                      <Button variant="danger" onClick={handleCloseEdit}>

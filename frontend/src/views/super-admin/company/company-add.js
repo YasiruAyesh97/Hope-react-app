@@ -32,11 +32,13 @@ const AdminAdd =() =>{
 
     const handleSubmit = async (values,{resetForm }) => {
         try {
+            setShowSuccess(false)
+            setShowWarning(false)
+            setShowDanger(false)
 
             const response = await registerCompany(values.name);
 
             if(response){
-                console.log(response)
                 setErrCode(200);
                 setErrMsg('Add new record successful');
                 resetForm({})
@@ -82,10 +84,10 @@ const AdminAdd =() =>{
                                         <Alert variant="success alert-left alert-dismissible fade show mb-3" role="alert" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible>
                                             <span>{errMsg}</span>
                                         </Alert>
-                                        <Alert variant="warning right alert-dismissible fade show mb-3" role="alert" show={showWarning} onClose={() => setShowWarning(false)} dismissible>
+                                        <Alert variant="warning alert-left alert-dismissible fade show mb-3" role="alert" show={showWarning} onClose={() => setShowWarning(false)} dismissible>
                                             <span>{errMsg}</span>
                                         </Alert>
-                                        <Alert variant="danger bottom alert-dismissible fade show" role="alert" show={showDanger} onClose={() => setShowDanger(false)} dismissible>
+                                        <Alert variant="danger alert-left alert-dismissible fade show mb-3" role="alert" show={showDanger} onClose={() => setShowDanger(false)} dismissible>
                                             <span>{errMsg}</span>
                                         </Alert>
                                     </Col>
