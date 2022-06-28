@@ -26,19 +26,40 @@ const AdminAdd =() =>{
         setErrMsg('');
         setErrCode(0);
     }, [])
+    const [errCode, setErrCode] = useState(0);
+
 
     const [errMsg, setErrMsg] = useState('');
-    const [errCode, setErrCode] = useState(0);
+
     //alert 200 404 500
     const [showSuccess ,setShowSuccess]= useState(false);
     const [showWarning,setShowWarning]= useState(false);
     const [showDanger,setShowDanger]= useState(false);
 
+    useEffect(() => {
+        if(showSuccess){
+            setTimeout(() => {
+                setShowSuccess(false)
+
+            }, 30000)
+        }if(showWarning){
+            setTimeout(() => {
+                if(showWarning){
+                    setShowWarning(false)
+                }
+            }, 30000)
+        }if(showDanger){
+            setTimeout(() => {
+                if(showDanger){
+                    setShowDanger(false)
+                }
+            }, 30000)
+        }
+
+    },[showSuccess,showWarning,showDanger]);
+
     const handleSubmit = async (values,{resetForm }) => {
         try {
-            setShowSuccess(false)
-            setShowWarning(false)
-            setShowDanger(false)
 
             const response = await registerRegularUser(values.email,values.username,values.password,auth.companyId);
 

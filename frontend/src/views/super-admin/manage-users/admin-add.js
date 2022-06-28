@@ -44,11 +44,30 @@ const AdminAdd =() =>{
     const [showWarning,setShowWarning]= useState(false);
     const [showDanger,setShowDanger]= useState(false);
 
+    useEffect(() => {
+        if(showSuccess){
+            setTimeout(() => {
+                setShowSuccess(false)
+
+            }, 30000)
+        }if(showWarning){
+            setTimeout(() => {
+                if(showWarning){
+                    setShowWarning(false)
+                }
+            }, 30000)
+        }if(showDanger){
+            setTimeout(() => {
+                if(showDanger){
+                    setShowDanger(false)
+                }
+            }, 30000)
+        }
+
+    },[showSuccess,showWarning,showDanger]);
+
     const handleSubmit = async (values,{resetForm }) => {
         try {
-            setShowSuccess(false)
-            setShowWarning(false)
-            setShowDanger(false)
 
             const response = await registerAdminOrUser(values.email,values.username,values.password,values.companyId,values.checkadmin,values.checkuser);
 
