@@ -1,16 +1,53 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col, Button, Modal, Form, FormCheck} from 'react-bootstrap'
+import {Row, Col, Button, Modal, Form, FormCheck, Alert} from 'react-bootstrap'
 import Card from '../../../components/Card'
-import {documentListDataFetch,selectedDocumentStatusUpdate,selectedDocumentDelete} from "../../../service/web/userService";
+import {
+   documentListDataFetch,
+   selectedDocumentStatusUpdate,
+   selectedDocumentDelete,
+   selectedDocumentDataFetch,
+   selectedDocumentUpdate,
+   activeCatalog1DataFetch,
+   activeCatalog2DataFetch,
+   activeCatalog3DataFetch
+
+} from "../../../service/web/userService";
 import useAuth from "../../../hooks/useAuth";
+import {Formik} from "formik";
+import * as yup from "yup";
+import {useNavigate} from "react-router-dom";
+
+const schema = yup.object().shape({
+   name: yup.string().required().label("name"),
+   dueDate: yup.string().required().label("due date"),
+   agentName: yup.string().required().label("agent name"),
+   catalog1Id: yup.string().required().label("catalog 1"),
+   catalog2Id: yup.string().required().label("catalog 2"),
+   catalog3Id: yup.string().required().label("catalog 3"),
+});
 
 const UserList =() =>{
    const { auth } = useAuth();
+   const navigate = useNavigate();
+
    //initial record
    const [documentList,setDocumentList]=useState([])
+
+   const [catalog1List,setCatalog1List]=useState([])
+   const [catalog2List,setCatalog2List]=useState([])
+   const [catalog3List,setCatalog3List]=useState([])
+
+   const [errMsg, setErrMsg] = useState('');
+   const [errCode, setErrCode] = useState(0);
+
+   //alert 200 404 500
+   const [showWarning,setShowWarning]= useState(false);
+   const [showDanger,setShowDanger]= useState(false);
+
    //initial data load
    useEffect(() => {
       getDocumentDataList();
+      getCatalogList();
    }, [])
 
    async function getDocumentDataList(){
@@ -18,6 +55,20 @@ const UserList =() =>{
       setDocumentList(doc)
    }
 
+   async function getCatalogList(){
+      try{
+         const {data:catalog1} =await activeCatalog1DataFetch(auth.companyId);
+         const {data:catalog2} =await activeCatalog2DataFetch(auth.companyId);
+         const {data:catalog3} =await activeCatalog3DataFetch(auth.companyId);
+
+         setCatalog1List(catalog1)
+         setCatalog2List(catalog2)
+         setCatalog3List(catalog3)
+      }catch (e) {
+
+      }
+
+   }
    //handle delete
 
    const [show1, setShow1] = useState(false);
@@ -63,35 +114,79 @@ const UserList =() =>{
       }
 
    }
-   //view model
+   //edit model
    const [show, setShow] = useState(false);
    const [initialValues,setInitialValues]=useState({
-      docName: "",
-      catalog1name: "",
-      catalog2name: "",
-      catalog3name: "",
+      name:"",
+      dueDate: "",
+      agentName: "",
+      catalog1Id : "",
+      catalog2Id : "",
+      catalog3Id : "",
 
 
    })
 
    const handleCloseEdit = () => setShow(false);
 
-   const handleShowView = (item) =>{
+   const handleShowView =async (item) =>{
 
-      setSelectRow(item)
-      setInitialValues({
-         docName:item.name,
-         catalog1name: item.catalog1name,
-         catalog2name: item.catalog2name,
-         catalog3name: item.catalog3name,
-         dueDate: item.dueDate,
-         agentName: item.agentName,
+      try{
+         setSelectRow(item)
 
-      })
+         const {data:doc} =await selectedDocumentDataFetch(item.id);
 
-      setShow(true)
 
+         setInitialValues({
+            name:doc.name,
+            catalog1Id: doc.catalog1Id,
+            catalog2Id: doc.catalog2Id,
+            catalog3Id: doc.catalog3Id,
+            dueDate: doc.dueDate.substring(0,10),
+            agentName: doc.agentName,
+
+         })
+
+         setShow(true)
+      }catch(err){
+
+      }
    };
+
+   const handleSubmit= async (values)=>{
+      try {
+         const response = await selectedDocumentUpdate(selectRow.id,values.name,values.dueDate,values.agentName,values.catalog1Id,values.catalog2Id,values.catalog3Id,auth.companyId,auth.id);
+
+         if(response){
+            setErrCode(200);
+            setErrMsg('Add new record successful');
+            getDocumentDataList()
+         }
+         handleCloseEdit()
+
+      } catch (err) {
+         if (!err?.response) {
+            setErrMsg('No Server Response');
+            setErrCode(500);
+            setShowDanger(true)
+         } else if (err.response?.status === 400) {
+            setErrMsg('Document Name Already Inserted!');
+            setErrCode(400);
+            setShowWarning(true)
+         } else if (err.response?.status === 401) {
+            setErrMsg('Document Insertion Failed');
+            setErrCode(401);
+            setShowWarning(true)
+         }  else if (err.response?.status === 403) {
+            navigate("/auth")
+            setErrCode(403);
+         } else {
+            setErrMsg('Document Insertion Failed');
+            setShowDanger(true);
+         }
+      }
+
+   }
 
    return(
        <>
@@ -103,6 +198,7 @@ const UserList =() =>{
                          <div className="header-title">
                             <h4 className="card-title">Document List</h4>
                          </div>
+
                       </Card.Header>
                       <Card.Body className="px-0">
                          <div className="table-responsive">
@@ -147,7 +243,7 @@ const UserList =() =>{
 
                                                   </Form.Check>
                                                   {' '}
-                                                  <Button style={{ marginRight: 4 }} className="btn btn-sm btn-icon " variant="success" data-toggle="tooltip" data-placement="top" title="" data-original-title="View" to="#" onClick={()=>handleShowView(item)}>
+                                                  <Button style={{ marginRight: 4 }} className="btn btn-sm btn-icon " variant="warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="View" to="#" onClick={()=>handleShowView(item)}>
                                                      <span className="btn-inner">
                                                       <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                          <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
@@ -202,74 +298,168 @@ const UserList =() =>{
                                <Modal.Title>Document Details</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
+                               <Row className="justify-content-center">
+                                  <Col className="justify-content-center">
+                                     <Alert variant="warning alert-left alert-dismissible fade show mb-3" role="alert" show={showWarning} onClose={() => setShowWarning(false)} dismissible>
+                                        <span>{errMsg}</span>
+                                     </Alert>
+                                     <Alert variant="danger alert-left alert-dismissible fade show mb-3" role="alert" show={showDanger} onClose={() => setShowDanger(false)} dismissible>
+                                        <span>{errMsg}</span>
+                                     </Alert>
+                                  </Col>
+                               </Row>
+                               <br/>
+                                  <Formik
+                                      validationSchema={schema}
+                                      onSubmit={handleSubmit}
+                                      initialValues={initialValues}
+                                  >
+                                     {({
+                                          handleSubmit,
+                                          handleReset,
+                                          handleChange,
 
-                               <div className="row">
+                                          setFieldValue,
+                                          dirty,
+                                          isValid,
+                                          isInvalid,
+                                          values,
+                                          touched,
+                                          errors }) => (
 
-                                  <Form.Group className="mb-3">
-                                     <Form.Label htmlFor="catalog1name">Catalog1 </Form.Label>
-                                     <Form.Control
-                                         readOnly
-                                         type="text"
-                                         id="catalog1name"
-                                         name="catalog1name"
-                                         value={initialValues.catalog1name}
+                                         <form noValidate onSubmit={handleSubmit}>
+                                            <div className="row">
+                                               <Form.Group className="form-group">
+                                                  <Form.Label htmlFor="name"> Name:</Form.Label>
+                                                  <Form.Control
+                                                      type="text"
+                                                      id="name"
+                                                      name="name"
+                                                      placeholder=" "
+                                                      value={values.name}
+                                                      onChange={handleChange("name")}
+                                                      isValid={touched.name && !errors.name}
+                                                      isInvalid={errors.name}
 
-                                     />
-                                  </Form.Group>
+                                                  />
+                                                  <Form.Control.Feedback type={errors.name?"invalid":"valid"}>
+                                                     {errors.name}
+                                                  </Form.Control.Feedback>
+                                               </Form.Group>
 
-                                  <Form.Group className="mb-3">
-                                     <Form.Label htmlFor="catalog2name">Catalog2 </Form.Label>
-                                     <Form.Control
-                                         readOnly
-                                         type="text"
-                                         id="catalog2name"
-                                         name="catalog2name"
-                                         value={initialValues.catalog2name}
+                                               <Form.Group className="col-sm-12 form-group">
+                                                  <Form.Label>Catalog1 :</Form.Label>
+                                                  <Form.Select
+                                                      name="catalog1Id"
+                                                      className="selectpicker form-control"
+                                                      data-style="py-0"
+                                                      value={values.catalog1Id}
+                                                      onChange={handleChange("catalog1Id")}
+                                                      isValid={touched.catalog1Id && !errors.catalog1Id}
+                                                      isInvalid={errors.catalog1Id}
+                                                  >
+                                                     <option value="">select</option>
+                                                     {catalog1List.map((option) => (
+                                                         <option value={option.id}>{option.name}</option>
+                                                     ))}
+                                                  </Form.Select>
+                                                  <Form.Control.Feedback type={errors.catalog1Id?"invalid":"valid"}>
+                                                     {errors.catalog1Id}
+                                                  </Form.Control.Feedback>
+                                               </Form.Group>
 
-                                     />
-                                  </Form.Group>
+                                               <Form.Group className="col-sm-12 form-group">
+                                                  <Form.Label>Catalog2 :</Form.Label>
+                                                  <Form.Select
+                                                      name="catalog2Id"
+                                                      className="selectpicker form-control"
+                                                      data-style="py-0"
+                                                      value={values.catalog2Id}
+                                                      onChange={handleChange("catalog2Id")}
+                                                      isValid={touched.catalog2Id && !errors.catalog2Id}
+                                                      isInvalid={errors.catalog2Id}
+                                                  >
+                                                     <option value="">select</option>
+                                                     {catalog2List.map((option) => (
+                                                         <option value={option.id}>{option.name}</option>
+                                                     ))}
+                                                  </Form.Select>
+                                                  <Form.Control.Feedback type={errors.catalog2Id?"invalid":"valid"}>
+                                                     {errors.catalog2Id}
+                                                  </Form.Control.Feedback>
+                                               </Form.Group>
 
-                                  <Form.Group className="mb-3">
-                                     <Form.Label htmlFor="catalog2name">Catalog3 </Form.Label>
-                                     <Form.Control
-                                         readOnly
-                                         type="text"
-                                         id="catalog3name"
-                                         name="catalog3name"
-                                         value={initialValues.catalog3name}
+                                               <Form.Group className="col-sm-12 form-group">
+                                                  <Form.Label>Catalog3 :</Form.Label>
+                                                  <Form.Select
+                                                      name="catalog3Id"
+                                                      className="selectpicker form-control"
+                                                      data-style="py-0"
+                                                      value={values.catalog3Id}
+                                                      onChange={handleChange("catalog3Id")}
+                                                      isValid={touched.catalog3Id && !errors.catalog3Id}
+                                                      isInvalid={errors.catalog3Id}
+                                                  >
+                                                     <option value="">select</option>
+                                                     {catalog3List.map((option) => (
+                                                         <option value={option.id}>{option.name}</option>
+                                                     ))}
+                                                  </Form.Select>
+                                                  <Form.Control.Feedback type={errors.catalog3Id?"invalid":"valid"}>
+                                                     {errors.catalog3Id}
+                                                  </Form.Control.Feedback>
+                                               </Form.Group>
 
-                                     />
-                                  </Form.Group>
+                                               <Form.Group className="form-group">
+                                                  <Form.Label htmlFor="agentName">Agent Name:</Form.Label>
+                                                  <Form.Control
+                                                      type="text"
+                                                      id="agentName"
+                                                      name="agentName"
+                                                      placeholder=" "
+                                                      value={values.agentName}
+                                                      onChange={handleChange("agentName")}
+                                                      isValid={touched.agentName && !errors.agentName}
+                                                      isInvalid={errors.agentName}
+                                                  />
+                                                  <Form.Control.Feedback type="invalid">
+                                                     {errors.agentName}
+                                                  </Form.Control.Feedback>
 
-                                  <Form.Group className="mb-3">
-                                     <Form.Label htmlFor="catalog2name">Due Date </Form.Label>
-                                     <Form.Control
-                                         readOnly
-                                         type="text"
-                                         id="dueDate"
-                                         name="dueDate"
-                                         value={initialValues.dueDate}
+                                               </Form.Group>
 
-                                     />
-                                  </Form.Group>
+                                               <Form.Group className="form-group">
+                                                  <Form.Label htmlFor="dueDate">dueDate:</Form.Label>
+                                                  <Form.Control
+                                                      type="date"
+                                                      id="dueDate"
+                                                      name="dueDate"
+                                                      placeholder="Due Date"
+                                                      value={values.dueDate}
+                                                      onChange={handleChange("dueDate")}
+                                                      isValid={touched.dueDate && !errors.dueDate}
+                                                      isInvalid={errors.dueDate}
+                                                  />
+                                                  <Form.Control.Feedback type="invalid">
+                                                     {errors.dueDate}
+                                                  </Form.Control.Feedback>
 
-                                  <Form.Group className="mb-3">
-                                     <Form.Label htmlFor="catalog2name">Agent Name </Form.Label>
-                                     <Form.Control
-                                         readOnly
-                                         type="text"
-                                         id="agentName"
-                                         name="agentName"
-                                         value={initialValues.agentName}
-
-                                     />
-                                  </Form.Group>
-                               </div>
+                                               </Form.Group>
 
 
-                               <Button variant="danger" onClick={handleCloseEdit}>
-                                  Cancel
-                               </Button>
+                                            </div>
+                                            <Button
+                                                type="submit"
+                                                variant="btn btn-primary"
+                                                disabled={!(dirty && isValid)}
+                                            >Submit</Button>{' '}
+                                            <Button variant="danger" onClick={handleCloseEdit}>
+                                               Cancel
+                                            </Button>
+                                         </form>
+                                     )}
+                                  </Formik>
+
 
                             </Modal.Body>
                          </Modal>

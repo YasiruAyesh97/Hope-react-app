@@ -28,7 +28,7 @@ exports.insertCatalog2 = async (req, res) => {
 
            })
            .catch(err => {
-               res.status(401).send({ message: err.message });
+               return res.status(401).send({ message: err.message });
            });
 
    }catch(err) {
@@ -108,7 +108,7 @@ exports.selectedCatalog1StatusChange = async (req, res) => {
         });
 
         if(!ct1){
-            res.status(401).send({ message: 'not found catalog'});
+            return res.status(401).send({ message: 'not found catalog'});
         }
 
         Catalog_2.update(
@@ -117,7 +117,7 @@ exports.selectedCatalog1StatusChange = async (req, res) => {
         ).then(data => {
             return res.status(200).send({ message: "successfully" });
          }).catch(err => {
-                res.status(401).send({ message: err.message });
+            return res.status(401).send({ message: err.message });
          });
 
     }catch(err) {

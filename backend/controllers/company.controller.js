@@ -27,7 +27,7 @@ exports.registerCompany = async (req, res) => {
 
            })
            .catch(err => {
-               res.status(401).send({ message: err.message });
+               return res.status(401).send({ message: err.message });
            });
 
    }catch(err) {
@@ -121,7 +121,7 @@ exports.selectedCompanyStatusChange = async (req, res) => {
         ).then(company => {
             return res.status(200).send({ message: "successfully" });
          }).catch(err => {
-                res.status(401).send({ message: err.message });
+            return res.status(401).send({ message: err.message });
          });
 
 

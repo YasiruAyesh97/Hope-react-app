@@ -49,7 +49,7 @@ exports.regularUserRegister = async (req, res) => {
 
             })
             .catch(err => {
-                res.status(401).send({ message: err.message });
+                return res.status(401).send({ message: err.message });
             });
 
     }catch(err) {
@@ -163,7 +163,7 @@ exports.selectedRegularUserStatusChange = async (req, res) => {
         });
 
         if(!user){
-            res.status(401).send({ message:'no user found' });
+            return res.status(401).send({ message:'no user found' });
         }
 
         User.update(
@@ -172,7 +172,7 @@ exports.selectedRegularUserStatusChange = async (req, res) => {
         ).then(user => {
             return res.status(200).send({ message: "successfully" });
         }).catch(err => {
-            res.status(401).send({ message: err.message });
+            return res.status(401).send({ message: err.message });
         });
 
 

@@ -69,6 +69,12 @@ export function selectedRegularUserOrAdminUpdate(id,username,email,password,stat
             'x-access-token': sessionStorage.getItem('userToken')
         }});
 }
+export function selectedRegularUserOrAdminStatusUpdate(id){
+    return  axios.put(`${config["BASEURL"]}`+'/'+'api/super-admin/status'+'/'+id,{},{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
+}
 
 export function selectedUserDataDelete(id){
     return  axios.delete(`${config["BASEURL"]}`+'/'+'api/super-admin/delete-user'+'/'+id),{
@@ -218,6 +224,13 @@ export function documentListDataFetch(companyId){
         }});
 }
 
+export function selectedDocumentDataFetch(id){
+    return  axios.get(`${config["BASEURL"]}`+'/'+'api/document'+'/'+id,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
+}
+
 export function selectedDocumentDelete(id){
     return  axios.delete(`${config["BASEURL"]}`+'/'+'api/document/delete'+'/'+id,{
         headers: {
@@ -242,6 +255,13 @@ export function documentRecordInsert(name,dueDate,agentName,catalog1Id,catalog2I
 export function expiresSoonDocumentListDataFetch(companyId){
 
     return  axios.get(`${config["BASEURL"]}`+'/'+'api/document/expiresoon'+'/'+companyId,{
+        headers: {
+            'x-access-token': sessionStorage.getItem('userToken')
+        }});
+}
+
+export function selectedDocumentUpdate(id,name,dueDate,agentName,catalog1Id,catalog2Id,catalog3Id,companyId,userId){
+    return  axios.put(`${config["BASEURL"]}`+'/'+'api/document'+'/'+id,{name,dueDate,agentName,catalog1Id,catalog2Id,catalog3Id,companyId,userId},{
         headers: {
             'x-access-token': sessionStorage.getItem('userToken')
         }});

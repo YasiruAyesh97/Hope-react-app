@@ -156,6 +156,8 @@ exports.selectedUserEdit = async (req, res) => {
         let isAdmin = req.body.isAdmin;
         let isRUser = req.body.isRUser;
 
+
+
         let adminrole =await Role.findOne({
             where: {
                 name:roleAdmin
@@ -173,7 +175,19 @@ exports.selectedUserEdit = async (req, res) => {
         });
 
         if(!user){
-            res.status(401).send({ message:'no user found' });
+            return res.status(401).send({ message:'no user found' });
+        }
+
+        let newUser =await User.findOne({
+
+            where: {
+                email: req.body.email,
+                id: {[Op.not]:user.id}
+
+            }
+        });
+        if(newUser){
+            return res.status(400).send({ message: 'email already available'});
         }
 
         User.update(
@@ -224,8 +238,37 @@ exports.selectedUserEdit = async (req, res) => {
             }
 
         }).catch(err => {
-            res.status(401).send({ message: err.message });
+            return res.status(401).send({ message: err.message });
         });
+
+    }catch(err) {
+        return res.status(500).send({message: err.message });
+    }
+
+};
+
+exports.selectedRUserAdminStatusChange = async (req, res) => {
+
+    try{
+
+        let user =await User.findOne({
+
+            where: { id: req.params.id }
+        });
+
+        if(!user){
+            return res.status(401).send({ message: 'not found document'});
+        }
+
+        User.update(
+            { active: !user.active},
+            { where: { id: req.params.id } }
+        ).then(data => {
+            return res.status(200).send({ message: "successfully" });
+        }).catch(err => {
+            return res.status(401).send({ message: err.message });
+        });
+
 
     }catch(err) {
         return res.status(500).send({message: err.message });

@@ -77,7 +77,7 @@ exports.signup = async (req, res) => {
 
            })
            .catch(err => {
-               res.status(401).send({ message: err.message });
+               return res.status(401).send({ message: err.message });
            });
 
    }catch(err) {
@@ -85,58 +85,63 @@ exports.signup = async (req, res) => {
    }
 
 };
-exports.signin = (req, res) => {
-  User.findOne({
-    where: {
-      email: req.body.email
-    }
-  })
-    .then(user => {
-      if (!user) {
-          return res.status(400).send({ message: "No user found" });
-      }else if(!user.active){
-          return res.status(400).send({ message: "Your account is inactive contact your admin" });
-      }
+exports.signin =async (req, res) => {
+    try{
 
-      Company.findOne({
-          where: {
-              id:user.companyId
-          }
-      }).then(company=>{
-          if(!company.active){
-              return res.status(400).send({ message: "Your company is inactive" });
-          }
-      }).catch(err => {
-          res.status(500).send({ message: err.message });
-      });
+        const user = await User.findOne({
+            where: {
+                email: req.body.email
+            }
+        })
 
-
-      var passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-      );
-      if (!passwordIsValid) {
-        return res.status(401).send({
-          message: "Invalid password"
-        });
-      }
-
-
-      var authorities = [];
-      user.getRoles().then(roles => {
-        for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].name.toUpperCase());
+        if (!user) {
+            return res.status(400).send({ message: "No user found" });
+        }else if(!user.active){
+            return res.status(400).send({ message: "Your account is inactive contact your admin" });
         }
 
-          var token = jwt.sign({ id: user.id,username: user.username, email: user.email,roles: authorities,companyId:user.companyId  }, config.secret, {
-              expiresIn: 86400 // 24 hours
-          });
+        const company =await Company.findOne({
+            where: {
+                id:user.companyId
+            }
+        });
 
-        res.status(200).send(token);
-      });
-    })
-    .catch(err => {
-      res.status(500).send({ message: err.message });
-    });
+        if(!company){
+            return res.status(400).send({ message: "company not found" });
+        }
+        else if(!company.active){
+            return res.status(400).send({ message: "Your company is inactive" });
+        }
+
+        let passwordIsValid = bcrypt.compareSync(
+            req.body.password,
+            user.password
+        );
+        if (!passwordIsValid) {
+            return res.status(401).send({
+                message: "Invalid password"
+            });
+        }
+
+
+        var authorities = [];
+        user.getRoles()
+            .then(roles => {
+                for (let i = 0; i < roles.length; i++) {
+                    authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                }
+
+                var token = jwt.sign({ id: user.id,username: user.username, email: user.email,roles: authorities,companyId:user.companyId  }, config.secret, {
+                    expiresIn: 86400 // 24 hours
+                });
+
+                return res.status(200).send(token);
+            })
+            .catch(err => {
+                return res.status(500).send({ message: err.message });
+            });
+    }catch(err){
+        return res.status(500).send({ message: err.message });
+    }
 };
 

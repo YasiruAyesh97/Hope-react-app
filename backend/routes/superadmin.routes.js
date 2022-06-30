@@ -22,5 +22,6 @@ module.exports = function(app) {
   app.get("/api/super-admin/user-list",[authJwt.verifyToken,authJwt.isSuperAdmin],controller.usersList);
   app.post("/api/super-admin/selected-user",[authJwt.verifyToken,authJwt.isSuperAdmin], controller.selectedUser);
   app.put("/api/super-admin/edit-user/:id",[authJwt.verifyToken,authJwt.isSuperAdmin], controller.selectedUserEdit);
+  app.put("/api/super-admin/status/:id",[authJwt.verifyToken,authJwt.isSuperAdmin], controller.selectedRUserAdminStatusChange);
   app.delete("/api/super-admin/delete-user/:id",[authJwt.verifyToken,authJwt.isSuperAdmin], controller.deleteSelectedUser);
 };

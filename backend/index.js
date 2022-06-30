@@ -17,13 +17,9 @@ const User = db.user;
 const UserRole = db.users_roles;
 const Company = db.company;
 
-
-
 // Routers
 
-
 require('./routes/auth.routes')(app);
-require('./routes/user.routes')(app);
 require('./routes/company.routes')(app);
 require('./routes/superadmin.routes')(app);
 require('./routes/admin.routes')(app);
@@ -44,7 +40,6 @@ db.sequelize.sync({alter:true}).then(() => {
 
 function initial() {
 
-  console.log("superAdminCompany ::::"+superAdminCompany)
   Company.findOne({
     where: {
       name:superAdminCompany

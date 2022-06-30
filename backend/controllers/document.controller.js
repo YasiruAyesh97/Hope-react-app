@@ -197,3 +197,77 @@ exports.expireSoonDocumentList = async (req, res) => {
     }
 
 }
+
+
+exports.selectedDocumentDetails = async (req, res) => {
+
+    try{
+
+        let doc =await Document.findOne({
+
+            where: { id: req.params.id }
+        });
+
+        if(!doc){
+            res.status(401).send({ message: 'not found document'});
+        }
+
+        return res.status(200).send(doc);
+
+
+    }catch(err) {
+        return res.status(500).send({message: err.message });
+    }
+
+};
+
+exports.selectedDocumentUpdate = async (req, res) => {
+
+    try{
+
+        let doc =await Document.findOne({
+
+            where: { id: req.params.id }
+        });
+
+        if(!doc){
+            return res.status(401).send({ message: 'not found document'});
+        }
+
+        let document =await Document.findOne({
+
+            where: {
+                name: req.body.name,
+                id: {[Op.not]:doc.id}
+
+            }
+        });
+        if(document){
+            return res.status(400).send({ message: 'document name already available'});
+        }
+
+        Document.update(
+            {
+                name: req.body.name,
+                dueDate: req.body.dueDate,
+                agentName: req.body.agentName,
+                catalog1Id : req.body.catalog1Id,
+                catalog2Id : req.body.catalog2Id,
+                catalog3Id : req.body.catalog3Id,
+                userId  : req.body.userId ,
+                companyId  : req.body.companyId
+
+            },
+            { where: { id: req.params.id } }
+        ).then(data => {
+            return res.status(200).send({ message: "successfully" });
+        }).catch(err => {
+            return res.status(401).send({ message: err.message });
+        });
+
+
+    }catch(err) {
+        return res.status(500).send({message: err.message });
+    }
+
+};
